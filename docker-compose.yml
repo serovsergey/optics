@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  core-api:
+    # comment out `container_name` if testing with multiple instances
+    container_name: core-api
+    # image:
+    build:
+      context: core-api
+      target: dev
+    command: sh -c 'yarn && yarn start:dev'
+    ports:
+      - 5500:3000
+      - 9230:9229
+    volumes:
+      - ./core-api:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+
+  # Dependencies
+  postgres:
+    container_name: postgres_optics
+    image: postgres:16.0
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: optics_core_dev
+    ports:
+      - 5435:5432
+    volumes:
+      - ../data_private/postgres:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  redis:
+    container_name: redis_optics
+    image: redis:7.2
+    restart: always
+    ports:
+      - 6380:6379
