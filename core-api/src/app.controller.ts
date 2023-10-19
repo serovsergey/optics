@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ConfigService } from './modules/config/config.module';
+import { ConfigService } from './modules/service/config/config.module';
 import { UploadConfig } from './config';
 
 @Controller()

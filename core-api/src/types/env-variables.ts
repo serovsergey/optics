@@ -2,7 +2,7 @@ import { Environments } from '@constants';
 import { Config } from 'src/config';
 
 export type EnvironmentVariables = Config & {
-  NODE_ENV: Environments;
+  ENVIRONMENT: Environments;
   PORT: number;
 
   DATABASE_URL: string;
