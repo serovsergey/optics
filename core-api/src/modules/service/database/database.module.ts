@@ -10,6 +10,7 @@ import { config } from './data-source';
       autoLoadEntities: true,
       ...config,
     }),
+    // TODO: consider the need use this import
     // WinstonModule,
   ],
 })

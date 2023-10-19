@@ -20,8 +20,6 @@ import { ConfigService } from '../config/config.module';
           typePaths: ['./**/*.graphql'],
           introspection: !isProduction,
           playground: !isProduction,
-          //TODO: consider the need of the config param below
-          // installSubscriptionHandlers: true,
           definitions: {
             path: join(process.cwd(), 'src/graphql.ts'),
             outputAs: 'interface',
