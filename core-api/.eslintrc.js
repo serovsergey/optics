@@ -21,5 +21,17 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
+    '@typescript-eslint/no-floating-promises': 'warn',
+    '@typescript-eslint/no-misused-promises': 'warn',
+    '@typescript-eslint/no-throw-literal': 'warn',
+    '@typescript-eslint/return-await': ['warn', 'in-try-catch'],
   },
 };
