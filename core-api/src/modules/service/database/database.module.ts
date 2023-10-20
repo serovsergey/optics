@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { config } from 'src/config/database';
+import { config } from 'config/database';
 // import { WinstonModule } from '../winston/winston.module';
 
 @Module({

@@ -3,9 +3,9 @@ import {
   ConfigModule as NestConfigModule,
   ConfigService as NestConfigService,
 } from '@nestjs/config';
-import { configLoaders } from 'src/config';
-import { EnvironmentVariables } from 'src/types';
-import { envValidationSchema } from 'src/validation';
+import { configLoaders } from 'config';
+import { EnvironmentVariables } from 'types';
+import { envValidationSchema } from 'validation';
 
 export class ConfigService extends NestConfigService<
   EnvironmentVariables,

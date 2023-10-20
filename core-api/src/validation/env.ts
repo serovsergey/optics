@@ -16,12 +16,13 @@ export const envValidationSchema = Joi.object({
   DATABASE_LOGGING: Joi.boolean().default(false),
   DATABASE_SSL: Joi.boolean().default(false),
 
+  REDIS_URL: Joi.string().uri({ scheme: [/redis/] }),
+
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
 
   MAX_UPLOAD_FILE_SIZE: Joi.number().default(1000000),
   MAX_UPLOAD_FILES: Joi.number().default(10),
-  REDIS_URL: Joi.string().uri({ scheme: [/redis/] }),
 
   HASH_ID_SALT: Joi.string().required(),
   HASH_ID_LENGTH: Joi.number().default(6),
