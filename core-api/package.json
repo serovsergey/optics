@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "generate:typings": "ts-node src/scripts/generate-typings",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
     "typeorm-dev": "yarn typeorm -d src/config/database/data-source.ts",
     "typeorm-prod": "yarn typeorm -d dist/config/database/data-source.js",
@@ -25,7 +26,8 @@
     "migrate:dev": "yarn typeorm-dev migration:run",
     "migrate:devDown": "yarn typeorm-dev migration:revert",
     "migrate:prod": "yarn typeorm-prod migration:run",
-    "migrate:prodDown": "yarn typeorm-prod migration:revert"
+    "migrate:prodDown": "yarn typeorm-prod migration:revert",
+    "bootstrap": "ts-node -r tsconfig-paths/register src/scripts/bootstrap"
   },
   "dependencies": {
     "@apollo/server": "^4.9.4",

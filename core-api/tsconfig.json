@@ -16,7 +16,8 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "paths": {
-      "@constants": ["constants"]
+      "@constants": ["constants"],
+      "@graphql": ["../node_modules/graphql"]
     },
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
