@@ -1,0 +1,63 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Accountant {
+  date: DateTime
+  history: [AccountantHistory!]
+  value: Employee
+}
+
+type AccountantHistory {
+  date: DateTime
+  value: Employee
+}
+
+type CompanyName {
+  date: DateTime
+  value: String
+}
+
+type Constants {
+  accountant: Accountant
+  companyName: CompanyName
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Employee {
+  createdAt: DateTime!
+  description: String
+  id: Float!
+  isFolder: Boolean!
+  name: String!
+  parentId: Float
+  updatedAt: DateTime!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+input ListCatalogOptions {
+  orderBy: JSON
+  skip: Float
+  take: Float
+  where: JSON
+}
+
+type Mutation {
+  deleteAccountantHistoryRecord(date: DateTime!): Boolean!
+  updateAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
+  updateCompanyName(value: String!): CompanyName!
+}
+
+type Query {
+  getConstants(date: DateTime): Constants
+  getEmployees(options: ListCatalogOptions!, parentId: Float): [Employee!]!
+  health: String!
+}

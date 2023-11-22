@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SingularValue {
+  singular
+}
+
+model const_CompanyName {
+  singular SingularValue @unique @default(singular)
+  date     DateTime      @unique @default(now()) @updatedAt @db.Timestamptz(6)
+  value    String?       @db.VarChar
+
+  @@map("constant.company_name")
+}
+
+model const_Accountant {
+  date       DateTime  @unique @default(now()) @db.Timestamptz(6)
+  employeeId Int?
+  value      Employee? @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+
+  @@map("constant.accountant")
+}
+
+model Employee {
+  id               Int                @id @default(autoincrement())
+  parentId         Int?               @map("parent_id")
+  isFolder         Boolean            @default(false) @map("is_folder")
+  name             String             @db.VarChar
+  description      String?            @db.VarChar
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent           Employee?          @relation("EmployeeRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children         Employee[]         @relation("EmployeeRecursive")
+  const_Accountant const_Accountant[]
+
+  @@map("employees")
+}
+
+model Partner {
+  id          Int       @id @default(autoincrement())
+  parentId    Int?      @map("parent_id")
+  isFolder    Boolean   @default(false) @map("is_folder")
+  name        String    @db.VarChar
+  description String?   @db.VarChar
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent      Partner?  @relation("PartnerRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children    Partner[] @relation("PartnerRecursive")
+
+  @@map("partners")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  parentId    Int?      @map("parent_id")
+  isFolder    Boolean   @default(false) @map("is_folder")
+  name        String    @db.VarChar
+  description String?   @db.VarChar
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent      Product?  @relation("ProductRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children    Product[] @relation("ProductRecursive")
+
+  @@map("products")
+}

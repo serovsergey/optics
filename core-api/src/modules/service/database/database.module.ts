@@ -1,17 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { config } from 'config/database';
-// import { WinstonModule } from '../winston/winston.module';
+import { PrismaService } from './prisma.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      autoLoadEntities: true,
-      ...config,
-    }),
-    // TODO: consider the need use this import
-    // WinstonModule,
-  ],
+  providers: [PrismaService],
+  exports: [PrismaService],
 })
 export class DatabaseModule {}
