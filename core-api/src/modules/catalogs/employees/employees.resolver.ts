@@ -1,11 +1,12 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Employee } from './models/employee.model';
 import { EmployeesService } from './employees.service';
-import { Inject, LoggerService, UsePipes } from '@nestjs/common';
+import { Inject, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ListCatalogOptionsPipe } from 'pipes/list-catalog-options';
 import { Prisma } from '@prisma/client';
 import { ListCatalogOptions } from 'types';
+import { EmployeeResult } from './dto/employee-result';
+import { extractChildrenCount } from 'utils';
 
 @Resolver()
 export class EmployeesResolver {
@@ -15,7 +16,7 @@ export class EmployeesResolver {
     private readonly logger: LoggerService,
   ) {}
 
-  @Query(() => [Employee])
+  @Query(() => [EmployeeResult], { name: 'employees' })
   async getEmployees(
     @Args('parentId', { nullable: true })
     parentId: number,
@@ -30,7 +31,21 @@ export class EmployeesResolver {
       Prisma.EmployeeWhereInput,
       Prisma.EmployeeOrderByWithRelationInput
     >,
-  ): Promise<Employee[]> {
-    return this.employeesService.getEmployees(parentId, options);
+  ): Promise<EmployeeResult[]> {
+    const employees = await this.employeesService.findMany({
+      ...options,
+      where: { ...options.where, parentId },
+    });
+    return employees.map(extractChildrenCount);
+  }
+
+  @Query(() => EmployeeResult, { name: 'employee', nullable: true })
+  async getEmployee(@Args('id') id: number): Promise<EmployeeResult | null> {
+    const employee = await this.employeesService.findOne({ where: { id } });
+    if (!employee) {
+      this.logger.warn(`Employee with id ${id} not found`);
+      return null;
+    }
+    return extractChildrenCount(employee);
   }
 }

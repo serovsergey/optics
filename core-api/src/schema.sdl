@@ -13,6 +13,12 @@ type AccountantHistory {
   value: Employee
 }
 
+type Appearance {
+  color: String
+  productId: Float!
+  weight: Float
+}
+
 type CompanyName {
   date: DateTime
   value: String
@@ -38,10 +44,27 @@ type Employee {
   updatedAt: DateTime!
 }
 
+type EmployeeResult {
+  childrenCount: Float!
+  createdAt: DateTime!
+  description: String
+  id: Float!
+  isFolder: Boolean!
+  name: String!
+  parentId: Float
+  updatedAt: DateTime!
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON
+
+type LensParams {
+  diameter: Float
+  index: Float
+  productId: Float!
+}
 
 input ListCatalogOptions {
   orderBy: JSON
@@ -56,8 +79,34 @@ type Mutation {
   updateCompanyName(value: String!): CompanyName!
 }
 
+type ProductResult {
+  appearance: Appearance
+  childrenCount: Float!
+  createdAt: DateTime!
+  description: String
+  id: Float!
+  isFolder: Boolean!
+  lensParams: LensParams
+  name: String!
+  parentId: Float
+  rimParams: RimParams
+  updatedAt: DateTime!
+}
+
 type Query {
-  getConstants(date: DateTime): Constants
-  getEmployees(options: ListCatalogOptions!, parentId: Float): [Employee!]!
+  constants(date: DateTime): Constants
+  employee(id: Float!): EmployeeResult
+  employees(options: ListCatalogOptions!, parentId: Float): [EmployeeResult!]!
   health: String!
+  product(id: Float!): ProductResult
+  products(options: ListCatalogOptions!, parentId: Float): [ProductResult!]!
+}
+
+type RimParams {
+  bridge: Float
+  frameHeight: Float
+  frameShape: String
+  frameWidth: Float
+  productId: Float!
+  temple: Float
 }

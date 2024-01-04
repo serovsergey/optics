@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Employee } from 'modules/employees/models/employee.model';
+import { Employee } from 'modules/catalogs/employees/models/employee.model';
 import { AccountantHistory } from './accountant-history';
 
 @ObjectType()

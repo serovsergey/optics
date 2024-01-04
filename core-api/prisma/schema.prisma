@@ -57,15 +57,48 @@ model Partner {
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
-  parentId    Int?      @map("parent_id")
-  isFolder    Boolean   @default(false) @map("is_folder")
-  name        String    @db.VarChar
-  description String?   @db.VarChar
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
-  parent      Product?  @relation("ProductRecursive", fields: [parentId], references: [id], onDelete: Restrict)
-  children    Product[] @relation("ProductRecursive")
+  id          Int                @id @default(autoincrement())
+  parentId    Int?               @map("parent_id")
+  isFolder    Boolean            @default(false) @map("is_folder")
+  name        String             @db.VarChar
+  description String?            @db.VarChar
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent      Product?           @relation("ProductRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children    Product[]          @relation("ProductRecursive")
+  appearance  ProductAppearance?
+  rimParams   ProductRimParams?
+  lensParams  ProductLensParams?
 
   @@map("products")
+}
+
+model ProductAppearance {
+  productId Int     @unique @map("product_id")
+  color     String? @db.VarChar
+  weight    Int?
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("products.appearance")
+}
+
+model ProductRimParams {
+  productId   Int     @unique @map("product_id")
+  bridge      Int?
+  temple      Int?
+  frameWidth  Int?
+  frameHeight Int?
+  frameShape  String?
+  product     Product @relation(fields: [productId], references: [id])
+
+  @@map("products.rim_params")
+}
+
+model ProductLensParams {
+  productId Int     @unique @map("product_id")
+  index     Float?
+  diameter  Int?
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("products.lens_params")
 }

@@ -14,7 +14,7 @@ export class ConstantsResolver {
     private readonly logger: LoggerService,
   ) {}
 
-  @Query(() => Constants, { nullable: true })
+  @Query(() => Constants, { name: 'constants', nullable: true })
   async getConstants(
     @Args('date', { nullable: true }) date: Date,
     @Info() info,
