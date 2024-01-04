@@ -1,11 +1,7 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { FrameShape } from './frame-shape.model';
+import { Field, InputType } from '@nestjs/graphql';
 
-@ObjectType()
-export class RimParams {
-  @Field()
-  productId: number;
-
+@InputType()
+export class RimParamsInput {
   @Field({ nullable: true })
   bridge?: number;
 
@@ -19,5 +15,5 @@ export class RimParams {
   frameHeight?: number;
 
   @Field({ nullable: true })
-  frameShape?: FrameShape;
+  frameShapeId?: number;
 }

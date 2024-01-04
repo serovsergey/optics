@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProductResult } from './dto/product-result';
 import { ListCatalogOptionsPipe } from 'pipes/list-catalog-options';
 import { Prisma } from '@prisma/client';
@@ -7,6 +7,8 @@ import { Inject, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ProductsService } from './products.service';
 import { extractChildrenCount } from 'utils';
+import { Product } from './models/product.model';
+import { ProductCreateInput } from './dto/product-create-input';
 
 @Resolver()
 export class ProductsResolver {
@@ -35,6 +37,7 @@ export class ProductsResolver {
       ...options,
       where: { ...options.where, parentId },
     });
+
     return products.map(extractChildrenCount);
   }
 
@@ -47,6 +50,42 @@ export class ProductsResolver {
       this.logger.warn(`Product with id ${id} not found`);
       return null;
     }
+
     return extractChildrenCount(product);
+  }
+  @Mutation(() => Product, { name: 'createProduct' })
+  async createProduct(
+    @Args('data') data: ProductCreateInput,
+  ): Promise<Product> {
+    const { appearance, lensParams, rimParams, ...rest } = data;
+    const { frameShapeId, ...rimParamsRest } = rimParams || {};
+    const { colorId, ...appearanceRest } = appearance || {};
+    const hasAppearance = appearance && Object.values(appearance).some(Boolean);
+    const hasLensParams = lensParams && Object.values(lensParams).some(Boolean);
+    const hasRimParams = rimParams && Object.values(rimParams).some(Boolean);
+    return this.productsService.create({
+      ...rest,
+      ...(hasAppearance && {
+        appearance: {
+          create: {
+            ...appearanceRest,
+            ...(colorId && { color: { connect: { id: colorId } } }),
+          },
+        },
+      }),
+      ...(hasLensParams && {
+        lensParams: { create: lensParams },
+      }),
+      ...(hasRimParams && {
+        rimParams: {
+          create: {
+            ...rimParamsRest,
+            ...(frameShapeId && {
+              frameShape: { connect: { id: frameShapeId } },
+            }),
+          },
+        },
+      }),
+    });
   }
 }

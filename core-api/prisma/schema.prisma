@@ -27,6 +27,26 @@ model const_Accountant {
   @@map("constant.accountant")
 }
 
+model Color {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime            @default(now()) @map("updated_at") @db.Timestamptz(6)
+  ProductAppearance ProductAppearance[]
+
+  @@map("colors")
+}
+
+model FrameShape {
+  id               Int                @id @default(autoincrement())
+  name             String             @db.VarChar
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
+  ProductRimParams ProductRimParams[]
+
+  @@map("frame_shapes")
+}
+
 model Employee {
   id               Int                @id @default(autoincrement())
   parentId         Int?               @map("parent_id")
@@ -75,21 +95,23 @@ model Product {
 
 model ProductAppearance {
   productId Int     @unique @map("product_id")
-  color     String? @db.VarChar
+  color     Color?  @relation(fields: [colorId], references: [id], onDelete: Restrict)
+  colorId   Int?    @map("color_id")
   weight    Int?
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("products.appearance")
 }
 
 model ProductRimParams {
-  productId   Int     @unique @map("product_id")
-  bridge      Int?
-  temple      Int?
-  frameWidth  Int?
-  frameHeight Int?
-  frameShape  String?
-  product     Product @relation(fields: [productId], references: [id])
+  productId    Int         @unique @map("product_id")
+  bridge       Int?
+  temple       Int?
+  frameWidth   Int?
+  frameHeight  Int?
+  frameShape   FrameShape? @relation(fields: [frameShapeId], references: [id], onDelete: Restrict)
+  frameShapeId Int?        @map("frame_shape_id")
+  product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("products.rim_params")
 }
@@ -98,7 +120,7 @@ model ProductLensParams {
   productId Int     @unique @map("product_id")
   index     Float?
   diameter  Int?
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("products.lens_params")
 }

@@ -14,9 +14,19 @@ type AccountantHistory {
 }
 
 type Appearance {
-  color: String
+  color: Color
   productId: Float!
   weight: Float
+}
+
+input AppearanceInput {
+  colorId: Float
+  weight: Float
+}
+
+type Color {
+  id: Float!
+  name: String!
 }
 
 type CompanyName {
@@ -55,6 +65,11 @@ type EmployeeResult {
   updatedAt: DateTime!
 }
 
+type FrameShape {
+  id: Float!
+  name: String!
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -66,6 +81,11 @@ type LensParams {
   productId: Float!
 }
 
+input LensParamsInput {
+  diameter: Float
+  index: Float
+}
+
 input ListCatalogOptions {
   orderBy: JSON
   skip: Float
@@ -74,9 +94,35 @@ input ListCatalogOptions {
 }
 
 type Mutation {
+  createProduct(data: ProductCreateInput!): Product!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
   updateAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
   updateCompanyName(value: String!): CompanyName!
+}
+
+type Product {
+  appearance: Appearance
+  createdAt: DateTime!
+  description: String
+  id: Float!
+  isFolder: Boolean!
+  lensParams: LensParams
+  name: String!
+  parentId: Float
+  rimParams: RimParams
+  updatedAt: DateTime!
+}
+
+input ProductCreateInput {
+  appearance: AppearanceInput
+  createdAt: DateTime
+  description: String
+  isFolder: Boolean!
+  lensParams: LensParamsInput
+  name: String!
+  parentId: Float!
+  rimParams: RimParamsInput
+  updatedAt: DateTime
 }
 
 type ProductResult {
@@ -105,8 +151,16 @@ type Query {
 type RimParams {
   bridge: Float
   frameHeight: Float
-  frameShape: String
+  frameShape: FrameShape
   frameWidth: Float
   productId: Float!
+  temple: Float
+}
+
+input RimParamsInput {
+  bridge: Float
+  frameHeight: Float
+  frameShapeId: Float
+  frameWidth: Float
   temple: Float
 }

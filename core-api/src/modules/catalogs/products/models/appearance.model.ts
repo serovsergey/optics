@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Color } from './color.model';
 
 @ObjectType()
 export class Appearance {
@@ -6,7 +7,7 @@ export class Appearance {
   productId: number;
 
   @Field({ nullable: true })
-  color?: string;
+  color?: Color;
 
   @Field({ nullable: true })
   weight?: number;

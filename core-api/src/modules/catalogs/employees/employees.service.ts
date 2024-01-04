@@ -6,19 +6,21 @@ import { PrismaService } from 'modules/service/database/prisma.service';
 export class EmployeesService {
   constructor(private prisma: PrismaService) {}
 
-  async findMany(options: Prisma.EmployeeFindManyArgs) {
-    return this.prisma.employee.findMany({
-      ...options,
-      include: {
-        _count: { select: { children: true } },
-      },
-    });
-  }
+  private include = {
+    _count: { select: { children: true } },
+  };
 
   async findOne(options: Prisma.EmployeeFindUniqueArgs) {
     return this.prisma.employee.findUnique({
       ...options,
-      include: { _count: { select: { children: true } } },
+      include: this.include,
+    });
+  }
+
+  async findMany(options: Prisma.EmployeeFindManyArgs) {
+    return this.prisma.employee.findMany({
+      ...options,
+      include: this.include,
     });
   }
 
