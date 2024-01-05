@@ -124,3 +124,17 @@ model ProductLensParams {
 
   @@map("products.lens_params")
 }
+
+model Warehouse {
+  id          Int         @id @default(autoincrement())
+  parentId    Int?        @map("parent_id")
+  isFolder    Boolean     @default(false) @map("is_folder")
+  name        String      @db.VarChar
+  description String?     @db.VarChar
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime    @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent      Warehouse?  @relation("WarehouseRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children    Warehouse[] @relation("WarehouseRecursive")
+
+  @@map("warehouses")
+}

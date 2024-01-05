@@ -7,4 +7,10 @@ export class Color {
 
   @Field()
   name: string;
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }

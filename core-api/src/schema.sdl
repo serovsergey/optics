@@ -25,8 +25,10 @@ input AppearanceInput {
 }
 
 type Color {
+  createdAt: DateTime!
   id: Int!
   name: String!
+  updatedAt: DateTime!
 }
 
 input ColorCreateInput {
@@ -59,12 +61,10 @@ type Employee {
 }
 
 input EmployeeCreateInput {
-  createdAt: DateTime!
   description: String
   isFolder: Boolean!
   name: String!
   parentId: Int
-  updatedAt: DateTime!
 }
 
 type EmployeeResult {
@@ -107,6 +107,7 @@ type Mutation {
   createPartner(data: PartnerCreateInput!): Partner!
   createProduct(data: ProductCreateInput!): Product!
   createRimShape(data: RimShapeCreateInput!): RimShape!
+  createWarehouse(data: WarehouseCreateInput!): Warehouse!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
   deleteColor(id: Int!): Color!
   deleteColors(ids: [Int!]!): Int!
@@ -116,12 +117,15 @@ type Mutation {
   deletePartners(ids: [Int!]!): Int!
   deleteRimShape(id: Int!): RimShape!
   deleteRimShapes(ids: [Int!]!): Int!
+  deleteWarehouse(id: Int!): Warehouse!
+  deleteWarehouses(ids: [Int!]!): Int!
   updateAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
   updateColor(data: ColorCreateInput!, id: Int!): Color!
   updateCompanyName(value: String!): CompanyName!
   updateEmployee(data: EmployeeCreateInput!, id: Int!): Employee!
   updatePartner(data: PartnerCreateInput!, id: Int!): Partner!
   updateRimShape(data: RimShapeCreateInput!, id: Int!): RimShape!
+  updateWarehouse(data: WarehouseCreateInput!, id: Int!): Warehouse!
 }
 
 type Partner {
@@ -135,12 +139,10 @@ type Partner {
 }
 
 input PartnerCreateInput {
-  createdAt: DateTime!
   description: String
   isFolder: Boolean!
   name: String!
   parentId: Int
-  updatedAt: DateTime!
 }
 
 type PartnerResult {
@@ -169,14 +171,12 @@ type Product {
 
 input ProductCreateInput {
   appearance: AppearanceInput
-  createdAt: DateTime
   description: String
   isFolder: Boolean!
   lensParams: LensParamsInput
   name: String!
   parentId: Int
   rimParams: RimParamsInput
-  updatedAt: DateTime
 }
 
 type ProductResult {
@@ -206,6 +206,8 @@ type Query {
   products(options: ListOptions, parentId: Int): [ProductResult!]!
   rimShape(id: Int!): RimShape
   rimShapes(options: ListOptions): [RimShape!]!
+  warehouse(id: Int!): WarehouseResult
+  warehouses(options: ListOptions, parentId: Int): [WarehouseResult!]!
 }
 
 type RimParams {
@@ -226,10 +228,40 @@ input RimParamsInput {
 }
 
 type RimShape {
+  createdAt: DateTime!
   id: Int!
   name: String!
+  updatedAt: DateTime!
 }
 
 input RimShapeCreateInput {
   name: String!
+}
+
+type Warehouse {
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+  updatedAt: DateTime!
+}
+
+input WarehouseCreateInput {
+  description: String
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+}
+
+type WarehouseResult {
+  childrenCount: Int!
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+  updatedAt: DateTime!
 }

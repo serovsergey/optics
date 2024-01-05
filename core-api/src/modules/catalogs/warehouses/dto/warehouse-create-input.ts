@@ -1,7 +1,7 @@
 import { Field, Int, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class PartnerCreateInput {
+export class WarehouseCreateInput {
   @Field(() => Int, { nullable: true })
   parentId?: number;
 

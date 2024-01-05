@@ -18,12 +18,6 @@ export class ProductCreateInput {
   description?: string | null;
 
   @Field({ nullable: true })
-  createdAt?: Date;
-
-  @Field({ nullable: true })
-  updatedAt?: Date;
-
-  @Field({ nullable: true })
   appearance?: AppearanceInput;
 
   @Field({ nullable: true })

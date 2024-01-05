@@ -9,6 +9,7 @@ import { ProductsModule } from './modules/catalogs/products/products.module';
 import { ColorsModule } from './modules/catalogs/colors/colors.module';
 import { RimShapesModule } from './modules/catalogs/rim-shapes/rim-shapes.module';
 import { PartnersModule } from 'modules/catalogs/partners/partners.module';
+import { WarehousesModule } from './modules/catalogs/warehouses/warehouses.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PartnersModule } from 'modules/catalogs/partners/partners.module';
     ProductsModule,
     ColorsModule,
     RimShapesModule,
+    WarehousesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
