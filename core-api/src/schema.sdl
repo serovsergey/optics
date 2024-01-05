@@ -29,6 +29,10 @@ type Color {
   name: String!
 }
 
+input ColorCreateInput {
+  name: String!
+}
+
 type CompanyName {
   date: DateTime
   value: String
@@ -89,10 +93,18 @@ input ListOptions {
 }
 
 type Mutation {
+  createColor(data: ColorCreateInput!): Color!
   createProduct(data: ProductCreateInput!): Product!
+  createRimShape(data: RimShapeCreateInput!): RimShape!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
+  deleteColor(id: Int!): Color!
+  deleteColors(ids: [Int!]!): Int!
+  deleteRimShape(id: Int!): RimShape!
+  deleteRimShapes(ids: [Int!]!): Int!
   updateAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
+  updateColor(data: ColorCreateInput!, id: Int!): Color!
   updateCompanyName(value: String!): CompanyName!
+  updateRimShape(data: RimShapeCreateInput!, id: Int!): RimShape!
 }
 
 type Product {
@@ -115,7 +127,7 @@ input ProductCreateInput {
   isFolder: Boolean!
   lensParams: LensParamsInput
   name: String!
-  parentId: Int!
+  parentId: Int
   rimParams: RimParamsInput
   updatedAt: DateTime
 }
@@ -143,6 +155,8 @@ type Query {
   health: String!
   product(id: Int!): ProductResult
   products(options: ListOptions, parentId: Int): [ProductResult!]!
+  rimShape(id: Int!): RimShape
+  rimShapes(options: ListOptions): [RimShape!]!
 }
 
 type RimParams {
@@ -164,5 +178,9 @@ input RimParamsInput {
 
 type RimShape {
   id: Int!
+  name: String!
+}
+
+input RimShapeCreateInput {
   name: String!
 }

@@ -5,7 +5,7 @@ import { LensParamsInput } from './lens-params-input';
 
 @InputType()
 export class ProductCreateInput {
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   parentId: number;
 
   @Field()
