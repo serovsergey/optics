@@ -58,6 +58,15 @@ type Employee {
   updatedAt: DateTime!
 }
 
+input EmployeeCreateInput {
+  createdAt: DateTime!
+  description: String
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+  updatedAt: DateTime!
+}
+
 type EmployeeResult {
   childrenCount: Int!
   createdAt: DateTime!
@@ -94,17 +103,55 @@ input ListOptions {
 
 type Mutation {
   createColor(data: ColorCreateInput!): Color!
+  createEmployee(data: EmployeeCreateInput!): Employee!
+  createPartner(data: PartnerCreateInput!): Partner!
   createProduct(data: ProductCreateInput!): Product!
   createRimShape(data: RimShapeCreateInput!): RimShape!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
   deleteColor(id: Int!): Color!
   deleteColors(ids: [Int!]!): Int!
+  deleteEmployee(id: Int!): Employee!
+  deleteEmployees(ids: [Int!]!): Int!
+  deletePartner(id: Int!): Partner!
+  deletePartners(ids: [Int!]!): Int!
   deleteRimShape(id: Int!): RimShape!
   deleteRimShapes(ids: [Int!]!): Int!
   updateAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
   updateColor(data: ColorCreateInput!, id: Int!): Color!
   updateCompanyName(value: String!): CompanyName!
+  updateEmployee(data: EmployeeCreateInput!, id: Int!): Employee!
+  updatePartner(data: PartnerCreateInput!, id: Int!): Partner!
   updateRimShape(data: RimShapeCreateInput!, id: Int!): RimShape!
+}
+
+type Partner {
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+  updatedAt: DateTime!
+}
+
+input PartnerCreateInput {
+  createdAt: DateTime!
+  description: String
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+  updatedAt: DateTime!
+}
+
+type PartnerResult {
+  childrenCount: Int!
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isFolder: Boolean!
+  name: String!
+  parentId: Int
+  updatedAt: DateTime!
 }
 
 type Product {
@@ -153,6 +200,8 @@ type Query {
   employee(id: Int!): EmployeeResult
   employees(options: ListOptions, parentId: Int): [EmployeeResult!]!
   health: String!
+  partner(id: Int!): PartnerResult
+  partners(options: ListOptions, parentId: Int): [PartnerResult!]!
   product(id: Int!): ProductResult
   products(options: ListOptions, parentId: Int): [ProductResult!]!
   rimShape(id: Int!): RimShape

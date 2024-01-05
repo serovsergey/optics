@@ -1,4 +1,4 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeesService } from './employees.service';
 import { Inject, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -7,6 +7,8 @@ import { EmployeeResult } from './dto/employee-result';
 import { extractChildrenCount } from 'utils';
 import { ListOptionsPipe } from 'pipes';
 import { ListOptions } from 'types';
+import { Employee } from './models/employee.model';
+import { EmployeeCreateInput } from './dto/employee-create-input';
 
 @Resolver()
 export class EmployeesResolver {
@@ -49,5 +51,36 @@ export class EmployeesResolver {
       return null;
     }
     return extractChildrenCount(employee);
+  }
+
+  @Mutation(() => Employee, { name: 'createEmployee' })
+  createEmployee(@Args('data') data: EmployeeCreateInput): Promise<Employee> {
+    return this.employeesService.create(data);
+  }
+
+  @Mutation(() => Employee, { name: 'updateEmployee' })
+  updateEmployee(
+    @Args({ name: 'id', type: () => Int }) id: number,
+    @Args('data') data: EmployeeCreateInput,
+  ): Promise<Employee> {
+    return this.employeesService.update({ data, where: { id } });
+  }
+
+  @Mutation(() => Employee, { name: 'deleteEmployee' })
+  deleteEmployee(
+    @Args({ name: 'id', type: () => Int }) id: number,
+  ): Promise<Employee> {
+    return this.employeesService.delete({ where: { id } });
+  }
+
+  @Mutation(() => Int, { name: 'deleteEmployees' })
+  async deleteEmployees(
+    @Args({ name: 'ids', type: () => [Int] }) ids: number[],
+  ): Promise<number> {
+    const deleted = await this.employeesService.deleteMany({
+      where: { id: { in: ids } },
+    });
+
+    return deleted.count;
   }
 }
