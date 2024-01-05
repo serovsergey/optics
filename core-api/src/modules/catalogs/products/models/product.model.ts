@@ -1,14 +1,14 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Appearance } from './appearance.model';
 import { LensParams } from './lens-params.model';
 import { RimParams } from './rim-params.model';
 
 @ObjectType()
 export class Product {
-  @Field()
+  @Field(() => Int)
   id: number;
 
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   parentId?: number;
 
   @Field()

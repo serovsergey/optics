@@ -15,17 +15,17 @@ type AccountantHistory {
 
 type Appearance {
   color: Color
-  productId: Float!
-  weight: Float
+  productId: Int!
+  weight: Int
 }
 
 input AppearanceInput {
-  colorId: Float
-  weight: Float
+  colorId: Int
+  weight: Int
 }
 
 type Color {
-  id: Float!
+  id: Int!
   name: String!
 }
 
@@ -47,27 +47,22 @@ scalar DateTime
 type Employee {
   createdAt: DateTime!
   description: String
-  id: Float!
+  id: Int!
   isFolder: Boolean!
   name: String!
-  parentId: Float
+  parentId: Int
   updatedAt: DateTime!
 }
 
 type EmployeeResult {
-  childrenCount: Float!
+  childrenCount: Int!
   createdAt: DateTime!
   description: String
-  id: Float!
+  id: Int!
   isFolder: Boolean!
   name: String!
-  parentId: Float
+  parentId: Int
   updatedAt: DateTime!
-}
-
-type FrameShape {
-  id: Float!
-  name: String!
 }
 
 """
@@ -76,17 +71,17 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type LensParams {
-  diameter: Float
+  diameter: Int
   index: Float
-  productId: Float!
+  productId: Int!
 }
 
 input LensParamsInput {
-  diameter: Float
+  diameter: Int
   index: Float
 }
 
-input ListCatalogOptions {
+input ListOptions {
   orderBy: JSON
   skip: Float
   take: Float
@@ -104,11 +99,11 @@ type Product {
   appearance: Appearance
   createdAt: DateTime!
   description: String
-  id: Float!
+  id: Int!
   isFolder: Boolean!
   lensParams: LensParams
   name: String!
-  parentId: Float
+  parentId: Int
   rimParams: RimParams
   updatedAt: DateTime!
 }
@@ -120,47 +115,54 @@ input ProductCreateInput {
   isFolder: Boolean!
   lensParams: LensParamsInput
   name: String!
-  parentId: Float!
+  parentId: Int!
   rimParams: RimParamsInput
   updatedAt: DateTime
 }
 
 type ProductResult {
   appearance: Appearance
-  childrenCount: Float!
+  childrenCount: Int!
   createdAt: DateTime!
   description: String
-  id: Float!
+  id: Int!
   isFolder: Boolean!
   lensParams: LensParams
   name: String!
-  parentId: Float
+  parentId: Int
   rimParams: RimParams
   updatedAt: DateTime!
 }
 
 type Query {
+  color(id: Int!): Color
+  colors(options: ListOptions): [Color!]!
   constants(date: DateTime): Constants
-  employee(id: Float!): EmployeeResult
-  employees(options: ListCatalogOptions!, parentId: Float): [EmployeeResult!]!
+  employee(id: Int!): EmployeeResult
+  employees(options: ListOptions, parentId: Int): [EmployeeResult!]!
   health: String!
-  product(id: Float!): ProductResult
-  products(options: ListCatalogOptions!, parentId: Float): [ProductResult!]!
+  product(id: Int!): ProductResult
+  products(options: ListOptions, parentId: Int): [ProductResult!]!
 }
 
 type RimParams {
-  bridge: Float
-  frameHeight: Float
-  frameShape: FrameShape
-  frameWidth: Float
+  bridge: Int
+  height: Int
   productId: Float!
-  temple: Float
+  shape: RimShape
+  temple: Int
+  width: Int
 }
 
 input RimParamsInput {
-  bridge: Float
-  frameHeight: Float
-  frameShapeId: Float
-  frameWidth: Float
-  temple: Float
+  bridge: Int
+  height: Int
+  shapeId: Int
+  temple: Int
+  width: Int
+}
+
+type RimShape {
+  id: Int!
+  name: String!
 }

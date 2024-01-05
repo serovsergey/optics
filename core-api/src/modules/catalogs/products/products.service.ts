@@ -9,7 +9,7 @@ export class ProductsService {
   private include = {
     appearance: { include: { color: true } },
     lensParams: true,
-    rimParams: { include: { frameShape: true } },
+    rimParams: { include: { shape: true } },
     _count: { select: { children: true } },
   };
 

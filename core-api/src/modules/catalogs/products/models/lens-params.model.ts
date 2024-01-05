@@ -1,13 +1,13 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class LensParams {
-  @Field()
+  @Field(() => Int)
   productId: number;
 
   @Field({ nullable: true })
   index?: number;
 
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   diameter?: number;
 }

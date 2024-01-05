@@ -1,14 +1,14 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProductResult } from './dto/product-result';
-import { ListCatalogOptionsPipe } from 'pipes/list-catalog-options';
 import { Prisma } from '@prisma/client';
-import { ListCatalogOptions } from 'types';
+import { ListOptions } from 'types';
 import { Inject, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ProductsService } from './products.service';
 import { extractChildrenCount } from 'utils';
 import { Product } from './models/product.model';
 import { ProductCreateInput } from './dto/product-create-input';
+import { ListOptionsPipe } from 'pipes';
 
 @Resolver()
 export class ProductsResolver {
@@ -19,16 +19,16 @@ export class ProductsResolver {
   ) {}
   @Query(() => [ProductResult], { name: 'products' })
   async getProducts(
-    @Args('parentId', { nullable: true })
+    @Args('parentId', { nullable: true, type: () => Int })
     parentId: number,
     @Args(
-      'options',
-      new ListCatalogOptionsPipe<
+      { name: 'options', nullable: true },
+      new ListOptionsPipe<
         Prisma.ProductWhereInput,
         Prisma.ProductOrderByWithRelationInput
       >(),
     )
-    options: ListCatalogOptions<
+    options: ListOptions<
       Prisma.ProductWhereInput,
       Prisma.ProductOrderByWithRelationInput
     >,
@@ -42,7 +42,9 @@ export class ProductsResolver {
   }
 
   @Query(() => ProductResult, { name: 'product', nullable: true })
-  async getProduct(@Args('id') id: number): Promise<ProductResult> {
+  async getProduct(
+    @Args({ name: 'id', type: () => Int }) id: number,
+  ): Promise<ProductResult> {
     const product = await this.productsService.findOne({
       where: { id },
     });
@@ -53,12 +55,13 @@ export class ProductsResolver {
 
     return extractChildrenCount(product);
   }
+
   @Mutation(() => Product, { name: 'createProduct' })
   async createProduct(
     @Args('data') data: ProductCreateInput,
   ): Promise<Product> {
     const { appearance, lensParams, rimParams, ...rest } = data;
-    const { frameShapeId, ...rimParamsRest } = rimParams || {};
+    const { shapeId, ...rimParamsRest } = rimParams || {};
     const { colorId, ...appearanceRest } = appearance || {};
     const hasAppearance = appearance && Object.values(appearance).some(Boolean);
     const hasLensParams = lensParams && Object.values(lensParams).some(Boolean);
@@ -80,8 +83,8 @@ export class ProductsResolver {
         rimParams: {
           create: {
             ...rimParamsRest,
-            ...(frameShapeId && {
-              frameShape: { connect: { id: frameShapeId } },
+            ...(shapeId && {
+              shape: { connect: { id: shapeId } },
             }),
           },
         },

@@ -37,14 +37,14 @@ model Color {
   @@map("colors")
 }
 
-model FrameShape {
+model RimShape {
   id               Int                @id @default(autoincrement())
   name             String             @db.VarChar
   createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
   ProductRimParams ProductRimParams[]
 
-  @@map("frame_shapes")
+  @@map("rim_shapes")
 }
 
 model Employee {
@@ -104,14 +104,14 @@ model ProductAppearance {
 }
 
 model ProductRimParams {
-  productId    Int         @unique @map("product_id")
-  bridge       Int?
-  temple       Int?
-  frameWidth   Int?
-  frameHeight  Int?
-  frameShape   FrameShape? @relation(fields: [frameShapeId], references: [id], onDelete: Restrict)
-  frameShapeId Int?        @map("frame_shape_id")
-  product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int       @unique @map("product_id")
+  bridge    Int?
+  temple    Int?
+  width     Int?
+  height    Int?
+  shape     RimShape? @relation(fields: [shapeId], references: [id], onDelete: Restrict)
+  shapeId   Int?      @map("shape_id")
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("products.rim_params")
 }

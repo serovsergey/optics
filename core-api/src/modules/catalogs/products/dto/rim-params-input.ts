@@ -1,19 +1,19 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class RimParamsInput {
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   bridge?: number;
 
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   temple?: number;
 
-  @Field({ nullable: true })
-  frameWidth?: number;
+  @Field(() => Int, { nullable: true })
+  width?: number;
 
-  @Field({ nullable: true })
-  frameHeight?: number;
+  @Field(() => Int, { nullable: true })
+  height?: number;
 
-  @Field({ nullable: true })
-  frameShapeId?: number;
+  @Field(() => Int, { nullable: true })
+  shapeId?: number;
 }

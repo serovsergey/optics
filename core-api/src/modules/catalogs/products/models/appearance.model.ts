@@ -1,14 +1,14 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Color } from './color.model';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Color } from 'modules/catalogs/colors/models/color.model';
 
 @ObjectType()
 export class Appearance {
-  @Field()
+  @Field(() => Int)
   productId: number;
 
   @Field({ nullable: true })
   color?: Color;
 
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   weight?: number;
 }
