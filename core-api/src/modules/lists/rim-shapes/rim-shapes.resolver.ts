@@ -2,11 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RimShapesService } from './rim-shapes.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Inject, LoggerService } from '@nestjs/common';
-import { ListOptionsPipe } from 'pipes';
-import { Prisma } from '@prisma/client';
-import { ListOptions } from 'types';
-import { RimShape } from './models/rim-shape.model';
-import { RimShapeCreateInput } from './dto/rim-shape-create-input';
+import { ListItem } from '../list-item.model';
 
 @Resolver()
 export class RimShapesResolver {
@@ -16,10 +12,10 @@ export class RimShapesResolver {
     private readonly logger: LoggerService,
   ) {}
 
-  @Query(() => RimShape, { name: 'rimShape', nullable: true })
+  @Query(() => ListItem, { name: 'rimShape', nullable: true })
   async getRimShape(
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<RimShape> {
+  ): Promise<ListItem> {
     const rimShape = await this.rimShapeService.findOne({
       where: { id },
     });
@@ -31,40 +27,28 @@ export class RimShapesResolver {
     return rimShape;
   }
 
-  @Query(() => [RimShape], { name: 'rimShapes' })
-  getRimShapes(
-    @Args(
-      { name: 'options', nullable: true },
-      new ListOptionsPipe<
-        Prisma.RimShapeWhereInput,
-        Prisma.RimShapeOrderByWithRelationInput
-      >(),
-    )
-    options?: ListOptions<
-      Prisma.RimShapeWhereInput,
-      Prisma.RimShapeOrderByWithRelationInput
-    >,
-  ): Promise<RimShape[]> {
-    return this.rimShapeService.findMany(options);
+  @Query(() => [ListItem], { name: 'rimShapes' })
+  getRimShapes(): Promise<ListItem[]> {
+    return this.rimShapeService.findMany({});
   }
 
-  @Mutation(() => RimShape, { name: 'createRimShape' })
-  createRimShape(@Args('data') data: RimShapeCreateInput): Promise<RimShape> {
-    return this.rimShapeService.create(data);
+  @Mutation(() => ListItem, { name: 'createRimShape' })
+  createRimShape(@Args('value') value: string): Promise<ListItem> {
+    return this.rimShapeService.create({ value });
   }
 
-  @Mutation(() => RimShape, { name: 'updateRimShape' })
+  @Mutation(() => ListItem, { name: 'updateRimShape' })
   updateRimShape(
     @Args({ name: 'id', type: () => Int }) id: number,
-    @Args('data') data: RimShapeCreateInput,
-  ): Promise<RimShape> {
-    return this.rimShapeService.update({ data, where: { id } });
+    @Args('value') value: string,
+  ): Promise<ListItem> {
+    return this.rimShapeService.update({ data: { value }, where: { id } });
   }
 
-  @Mutation(() => RimShape, { name: 'deleteRimShape' })
+  @Mutation(() => ListItem, { name: 'deleteRimShape' })
   deleteRimShape(
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<RimShape> {
+  ): Promise<ListItem> {
     return this.rimShapeService.delete({ where: { id } });
   }
 

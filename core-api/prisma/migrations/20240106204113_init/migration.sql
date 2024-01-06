@@ -1,9 +1,6 @@
 -- CreateEnum
 CREATE TYPE "SingularValue" AS ENUM ('singular');
 
--- CreateEnum
-CREATE TYPE "DioptreSign" AS ENUM ('+', '-', '');
-
 -- CreateTable
 CREATE TABLE "constant.company_name" (
     "singular" "SingularValue" NOT NULL DEFAULT 'singular',
@@ -18,23 +15,27 @@ CREATE TABLE "constant.accountant" (
 );
 
 -- CreateTable
-CREATE TABLE "catalog.colors" (
+CREATE TABLE "list.colors" (
     "id" SERIAL NOT NULL,
-    "name" VARCHAR NOT NULL,
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "value" VARCHAR NOT NULL,
 
-    CONSTRAINT "catalog.colors_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "list.colors_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "catalog.rim_shapes" (
+CREATE TABLE "list.rim_shapes" (
     "id" SERIAL NOT NULL,
-    "name" VARCHAR NOT NULL,
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "value" VARCHAR NOT NULL,
 
-    CONSTRAINT "catalog.rim_shapes_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "list.rim_shapes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "list.diopters" (
+    "id" SERIAL NOT NULL,
+    "value" VARCHAR NOT NULL,
+
+    CONSTRAINT "list.diopters_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -221,13 +222,13 @@ ALTER TABLE "catalog.nomenclatures" ADD CONSTRAINT "catalog.nomenclatures_parent
 ALTER TABLE "catalog.nomenclatures" ADD CONSTRAINT "catalog.nomenclatures_type_id_fkey" FOREIGN KEY ("type_id") REFERENCES "catalog_types.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "catalog.nomenclatures.appearance" ADD CONSTRAINT "catalog.nomenclatures.appearance_color_id_fkey" FOREIGN KEY ("color_id") REFERENCES "catalog.colors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "catalog.nomenclatures.appearance" ADD CONSTRAINT "catalog.nomenclatures.appearance_color_id_fkey" FOREIGN KEY ("color_id") REFERENCES "list.colors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "catalog.nomenclatures.appearance" ADD CONSTRAINT "catalog.nomenclatures.appearance_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "catalog.nomenclatures.rim_params" ADD CONSTRAINT "catalog.nomenclatures.rim_params_shape_id_fkey" FOREIGN KEY ("shape_id") REFERENCES "catalog.rim_shapes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "catalog.nomenclatures.rim_params" ADD CONSTRAINT "catalog.nomenclatures.rim_params_shape_id_fkey" FOREIGN KEY ("shape_id") REFERENCES "list.rim_shapes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "catalog.nomenclatures.rim_params" ADD CONSTRAINT "catalog.nomenclatures.rim_params_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { RimShape } from 'modules/catalogs/rim-shapes/models/rim-shape.model';
+import { RimShape } from 'modules/lists/rim-shapes/models/rim-shape.model';
 
 @ObjectType()
 export class RimParams {

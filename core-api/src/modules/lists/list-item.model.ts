@@ -1,16 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class RimShape {
+export class ListItem {
   @Field(() => Int)
   id: number;
 
   @Field()
-  name: string;
-
-  @Field()
-  createdAt: Date;
-
-  @Field()
-  updatedAt: Date;
+  value: string;
 }

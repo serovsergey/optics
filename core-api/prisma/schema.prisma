@@ -11,12 +11,6 @@ enum SingularValue {
   singular
 }
 
-enum DioptreSign {
-  plus     @map("+")
-  minus    @map("-")
-  unsigned @map("")
-}
-
 model const_CompanyName {
   singular SingularValue @unique @default(singular)
   date     DateTime      @unique @default(now()) @updatedAt @db.Timestamptz(6)
@@ -35,22 +29,25 @@ model const_Accountant {
 
 model Color {
   id                     Int                      @id @default(autoincrement())
-  name                   String                   @db.VarChar
-  createdAt              DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt              DateTime                 @default(now()) @map("updated_at") @db.Timestamptz(6)
+  value                  String                   @db.VarChar
   NomenclatureAppearance NomenclatureAppearance[]
 
-  @@map("catalog.colors")
+  @@map("list.colors")
 }
 
 model RimShape {
   id                    Int                     @id @default(autoincrement())
-  name                  String                  @db.VarChar
-  createdAt             DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt             DateTime                @default(now()) @map("updated_at") @db.Timestamptz(6)
+  value                 String                  @db.VarChar
   NomenclatureRimParams NomenclatureRimParams[]
 
-  @@map("catalog.rim_shapes")
+  @@map("list.rim_shapes")
+}
+
+model Diopter {
+  id    Int    @id @default(autoincrement())
+  value String @db.VarChar
+
+  @@map("list.diopters")
 }
 
 model Employee {
@@ -82,15 +79,15 @@ model NomenclatureType {
 }
 
 model TypeVariantsLens {
-  id             Int           @id @default(autoincrement())
-  nomenclatureId Int?          @map("nomenclature_id")
-  nomenclature   Nomenclature? @relation(fields: [nomenclatureId], references: [id], onDelete: Restrict)
-  cyl            Float?
-  sph            Float?
-  diameter       Int?
-  color          String?       @db.VarChar(2)
-  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
+  id                 Int           @id @default(autoincrement())
+  nomenclatureTypeId Int?          @map("nomenclature_id")
+  nomenclatureType   Nomenclature? @relation(fields: [nomenclatureTypeId], references: [id], onDelete: Restrict)
+  cyl                Float?
+  sph                Float?
+  diameter           Int?
+  color              String?       @db.VarChar(2)
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
 
   @@map("variants.lens")
 }

@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Color } from 'modules/catalogs/colors/models/color.model';
+import { Color } from 'modules/lists/colors/models/color.model';
 
 @ObjectType()
 export class Appearance {

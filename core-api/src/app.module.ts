@@ -6,14 +6,13 @@ import { HealthModule } from './modules/health/health.module';
 import { ConstantsModule } from './modules/constants/constants.module';
 import { EmployeesModule } from './modules/catalogs/employees/employees.module';
 import { NomenclaturesModule } from './modules/catalogs/nomenclatures/nomenclatures.module';
-import { ColorsModule } from './modules/catalogs/colors/colors.module';
-import { RimShapesModule } from './modules/catalogs/rim-shapes/rim-shapes.module';
+import { ColorsModule } from './modules/lists/colors/colors.module';
+import { RimShapesModule } from './modules/lists/rim-shapes/rim-shapes.module';
 import { PartnersModule } from 'modules/catalogs/partners/partners.module';
 import { WarehousesModule } from './modules/catalogs/warehouses/warehouses.module';
-import { PurchaseInvoicesService } from './modules/documents/purchase-invoices/purchase-invoices.service';
 import { PurchaseInvoicesModule } from './modules/documents/purchase-invoices/purchase-invoices.module';
-import { SalesInvoicesResolver } from './modules/documents/sales-invoices/sales-invoices.resolver';
 import { SalesInvoicesModule } from './modules/documents/sales-invoices/sales-invoices.module';
+import { DioptersModule } from './modules/lists/diopters/diopters.module';
 
 @Module({
   imports: [
@@ -28,8 +27,9 @@ import { SalesInvoicesModule } from './modules/documents/sales-invoices/sales-in
     WarehousesModule,
     PurchaseInvoicesModule,
     SalesInvoicesModule,
+    DioptersModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PurchaseInvoicesService, SalesInvoicesResolver],
+  providers: [AppService],
 })
 export class AppModule {}
