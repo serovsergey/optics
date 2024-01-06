@@ -11,6 +11,12 @@ enum SingularValue {
   singular
 }
 
+enum DioptreSign {
+  plus     @map("+")
+  minus    @map("-")
+  unsigned @map("")
+}
+
 model const_CompanyName {
   singular SingularValue @unique @default(singular)
   date     DateTime      @unique @default(now()) @updatedAt @db.Timestamptz(6)
@@ -28,23 +34,23 @@ model const_Accountant {
 }
 
 model Color {
-  id                Int                 @id @default(autoincrement())
-  name              String              @db.VarChar
-  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt         DateTime            @default(now()) @map("updated_at") @db.Timestamptz(6)
-  ProductAppearance ProductAppearance[]
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @db.VarChar
+  createdAt              DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime                 @default(now()) @map("updated_at") @db.Timestamptz(6)
+  NomenclatureAppearance NomenclatureAppearance[]
 
-  @@map("colors")
+  @@map("catalog.colors")
 }
 
 model RimShape {
-  id               Int                @id @default(autoincrement())
-  name             String             @db.VarChar
-  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
-  ProductRimParams ProductRimParams[]
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @db.VarChar
+  createdAt             DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime                @default(now()) @map("updated_at") @db.Timestamptz(6)
+  NomenclatureRimParams NomenclatureRimParams[]
 
-  @@map("rim_shapes")
+  @@map("catalog.rim_shapes")
 }
 
 model Employee {
@@ -58,83 +64,162 @@ model Employee {
   parent           Employee?          @relation("EmployeeRecursive", fields: [parentId], references: [id], onDelete: Restrict)
   children         Employee[]         @relation("EmployeeRecursive")
   const_Accountant const_Accountant[]
+  PurchaseInvoice  PurchaseInvoice[]
 
-  @@map("employees")
+  @@map("catalog.employees")
+}
+
+model NomenclatureType {
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar
+  countable     Boolean        @default(true)
+  variantsTable String?        @map("variants_table") @db.VarChar
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @default(now()) @map("updated_at") @db.Timestamptz(6)
+  Nomenclature  Nomenclature[]
+
+  @@map("catalog_types.nomenclatures")
+}
+
+model TypeVariantsLens {
+  id             Int           @id @default(autoincrement())
+  nomenclatureId Int?          @map("nomenclature_id")
+  nomenclature   Nomenclature? @relation(fields: [nomenclatureId], references: [id], onDelete: Restrict)
+  cyl            Float?
+  sph            Float?
+  diameter       Int?
+  color          String?       @db.VarChar(2)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  @@map("variants.lens")
+}
+
+model TypeVariantsReadyGlasses {
+  id             Int           @id @default(autoincrement())
+  nomenclatureId Int?          @map("nomenclature_id")
+  nomenclature   Nomenclature? @relation(fields: [nomenclatureId], references: [id], onDelete: Restrict)
+  sph            Float?
+  pd             Int?
+  lensColor      String?       @db.VarChar(2)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  @@map("variants.ready_glass")
 }
 
 model Partner {
-  id          Int       @id @default(autoincrement())
-  parentId    Int?      @map("parent_id")
-  isFolder    Boolean   @default(false) @map("is_folder")
-  name        String    @db.VarChar
-  description String?   @db.VarChar
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
-  parent      Partner?  @relation("PartnerRecursive", fields: [parentId], references: [id], onDelete: Restrict)
-  children    Partner[] @relation("PartnerRecursive")
+  id              Int               @id @default(autoincrement())
+  parentId        Int?              @map("parent_id")
+  isFolder        Boolean           @default(false) @map("is_folder")
+  name            String            @db.VarChar
+  description     String?           @db.VarChar
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent          Partner?          @relation("PartnerRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children        Partner[]         @relation("PartnerRecursive")
+  PurchaseInvoice PurchaseInvoice[]
 
-  @@map("partners")
+  @@map("catalog.partners")
 }
 
-model Product {
-  id          Int                @id @default(autoincrement())
-  parentId    Int?               @map("parent_id")
-  isFolder    Boolean            @default(false) @map("is_folder")
-  name        String             @db.VarChar
-  description String?            @db.VarChar
-  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
-  parent      Product?           @relation("ProductRecursive", fields: [parentId], references: [id], onDelete: Restrict)
-  children    Product[]          @relation("ProductRecursive")
-  appearance  ProductAppearance?
-  rimParams   ProductRimParams?
-  lensParams  ProductLensParams?
+model Nomenclature {
+  id                  Int                        @id @default(autoincrement())
+  parentId            Int?                       @map("parent_id")
+  isFolder            Boolean                    @default(false) @map("is_folder")
+  typeId              Int?                       @map("type_id")
+  name                String                     @db.VarChar
+  description         String?                    @db.VarChar
+  code                String?                    @db.VarChar
+  createdAt           DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime                   @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent              Nomenclature?              @relation("NomenclatureRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children            Nomenclature[]             @relation("NomenclatureRecursive")
+  appearance          NomenclatureAppearance?
+  rimParams           NomenclatureRimParams?
+  lensParams          NomenclatureLensParams?
+  type                NomenclatureType?          @relation(fields: [typeId], references: [id], onDelete: Restrict)
+  variantLenses       TypeVariantsLens[]
+  variantReadyGlasses TypeVariantsReadyGlasses[]
+  purchaseInvoiceItem PurchaseInvoiceItem[]
 
-  @@map("products")
+  @@map("catalog.nomenclatures")
 }
 
-model ProductAppearance {
-  productId Int     @unique @map("product_id")
-  color     Color?  @relation(fields: [colorId], references: [id], onDelete: Restrict)
-  colorId   Int?    @map("color_id")
-  weight    Int?
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+model NomenclatureAppearance {
+  nomenclatureId Int          @unique @map("nomenclature_id")
+  color          Color?       @relation(fields: [colorId], references: [id], onDelete: Restrict)
+  colorId        Int?         @map("color_id")
+  weight         Int?
+  nomenclature   Nomenclature @relation(fields: [nomenclatureId], references: [id], onDelete: Cascade)
 
-  @@map("products.appearance")
+  @@map("catalog.nomenclatures.appearance")
 }
 
-model ProductRimParams {
-  productId Int       @unique @map("product_id")
-  bridge    Int?
-  temple    Int?
-  width     Int?
-  height    Int?
-  shape     RimShape? @relation(fields: [shapeId], references: [id], onDelete: Restrict)
-  shapeId   Int?      @map("shape_id")
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+model NomenclatureRimParams {
+  nomenclatureId Int          @unique @map("nomenclature_id")
+  bridge         Int?
+  temple         Int?
+  width          Int?
+  height         Int?
+  shape          RimShape?    @relation(fields: [shapeId], references: [id], onDelete: Restrict)
+  shapeId        Int?         @map("shape_id")
+  nomenclature   Nomenclature @relation(fields: [nomenclatureId], references: [id], onDelete: Cascade)
 
-  @@map("products.rim_params")
+  @@map("catalog.nomenclatures.rim_params")
 }
 
-model ProductLensParams {
-  productId Int     @unique @map("product_id")
-  index     Float?
-  diameter  Int?
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+model NomenclatureLensParams {
+  nomenclatureId Int          @unique @map("nomenclature_id")
+  index          Float?
+  diameter       Int?
+  nomenclature   Nomenclature @relation(fields: [nomenclatureId], references: [id], onDelete: Cascade)
 
-  @@map("products.lens_params")
+  @@map("catalog.nomenclatures.lens_params")
 }
 
 model Warehouse {
-  id          Int         @id @default(autoincrement())
-  parentId    Int?        @map("parent_id")
-  isFolder    Boolean     @default(false) @map("is_folder")
-  name        String      @db.VarChar
-  description String?     @db.VarChar
-  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime    @default(now()) @map("updated_at") @db.Timestamptz(6)
-  parent      Warehouse?  @relation("WarehouseRecursive", fields: [parentId], references: [id], onDelete: Restrict)
-  children    Warehouse[] @relation("WarehouseRecursive")
+  id              Int               @id @default(autoincrement())
+  parentId        Int?              @map("parent_id")
+  isFolder        Boolean           @default(false) @map("is_folder")
+  name            String            @db.VarChar
+  description     String?           @db.VarChar
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  parent          Warehouse?        @relation("WarehouseRecursive", fields: [parentId], references: [id], onDelete: Restrict)
+  children        Warehouse[]       @relation("WarehouseRecursive")
+  PurchaseInvoice PurchaseInvoice[]
 
-  @@map("warehouses")
+  @@map("catalog.warehouses")
+}
+
+model PurchaseInvoice {
+  id                  Int                   @id @default(autoincrement())
+  date                DateTime              @default(now()) @map("date") @db.Timestamptz(6)
+  num                 String                @db.VarChar
+  partnerId           Int?                  @map("partner_id")
+  partner             Partner?              @relation(fields: [partnerId], references: [id], onDelete: Restrict)
+  warehouseId         Int?                  @map("warehouse_id")
+  warehouse           Warehouse?            @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime              @default(now()) @map("updated_at") @db.Timestamptz(6)
+  authorId            Int?                  @map("author_id")
+  author              Employee?             @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  PurchaseInvoiceItem PurchaseInvoiceItem[]
+
+  @@map("document.purchase_invoices")
+}
+
+model PurchaseInvoiceItem {
+  id             Int              @id @default(autoincrement())
+  invoiceId      Int?             @map("invoice_id")
+  invoice        PurchaseInvoice? @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+  nomenclatureId Int?             @map("nomenclature_id")
+  nomenclature   Nomenclature?    @relation(fields: [nomenclatureId], references: [id], onDelete: Restrict)
+  quantity       Int?
+  price          Float?
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  @@map("document.purchase_invoices.items")
 }

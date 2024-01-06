@@ -15,7 +15,7 @@ type AccountantHistory {
 
 type Appearance {
   color: Color
-  productId: Int!
+  nomenclatureId: Int!
   weight: Int
 }
 
@@ -86,7 +86,7 @@ scalar JSON
 type LensParams {
   diameter: Int
   index: Float
-  productId: Int!
+  nomenclatureId: Int!
 }
 
 input LensParamsInput {
@@ -104,8 +104,8 @@ input ListOptions {
 type Mutation {
   createColor(data: ColorCreateInput!): Color!
   createEmployee(data: EmployeeCreateInput!): Employee!
+  createNomenclature(data: NomenclatureCreateInput!): Nomenclature!
   createPartner(data: PartnerCreateInput!): Partner!
-  createProduct(data: ProductCreateInput!): Product!
   createRimShape(data: RimShapeCreateInput!): RimShape!
   createWarehouse(data: WarehouseCreateInput!): Warehouse!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
@@ -126,6 +126,43 @@ type Mutation {
   updatePartner(data: PartnerCreateInput!, id: Int!): Partner!
   updateRimShape(data: RimShapeCreateInput!, id: Int!): RimShape!
   updateWarehouse(data: WarehouseCreateInput!, id: Int!): Warehouse!
+}
+
+type Nomenclature {
+  appearance: Appearance
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isFolder: Boolean!
+  lensParams: LensParams
+  name: String!
+  parentId: Int
+  rimParams: RimParams
+  updatedAt: DateTime!
+}
+
+input NomenclatureCreateInput {
+  appearance: AppearanceInput
+  description: String
+  isFolder: Boolean!
+  lensParams: LensParamsInput
+  name: String!
+  parentId: Int
+  rimParams: RimParamsInput
+}
+
+type NomenclatureResult {
+  appearance: Appearance
+  childrenCount: Int!
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isFolder: Boolean!
+  lensParams: LensParams
+  name: String!
+  parentId: Int
+  rimParams: RimParams
+  updatedAt: DateTime!
 }
 
 type Partner {
@@ -156,43 +193,6 @@ type PartnerResult {
   updatedAt: DateTime!
 }
 
-type Product {
-  appearance: Appearance
-  createdAt: DateTime!
-  description: String
-  id: Int!
-  isFolder: Boolean!
-  lensParams: LensParams
-  name: String!
-  parentId: Int
-  rimParams: RimParams
-  updatedAt: DateTime!
-}
-
-input ProductCreateInput {
-  appearance: AppearanceInput
-  description: String
-  isFolder: Boolean!
-  lensParams: LensParamsInput
-  name: String!
-  parentId: Int
-  rimParams: RimParamsInput
-}
-
-type ProductResult {
-  appearance: Appearance
-  childrenCount: Int!
-  createdAt: DateTime!
-  description: String
-  id: Int!
-  isFolder: Boolean!
-  lensParams: LensParams
-  name: String!
-  parentId: Int
-  rimParams: RimParams
-  updatedAt: DateTime!
-}
-
 type Query {
   color(id: Int!): Color
   colors(options: ListOptions): [Color!]!
@@ -200,10 +200,10 @@ type Query {
   employee(id: Int!): EmployeeResult
   employees(options: ListOptions, parentId: Int): [EmployeeResult!]!
   health: String!
+  nomenclature(id: Int!): NomenclatureResult
+  nomenclatures(options: ListOptions, parentId: Int): [NomenclatureResult!]!
   partner(id: Int!): PartnerResult
   partners(options: ListOptions, parentId: Int): [PartnerResult!]!
-  product(id: Int!): ProductResult
-  products(options: ListOptions, parentId: Int): [ProductResult!]!
   rimShape(id: Int!): RimShape
   rimShapes(options: ListOptions): [RimShape!]!
   warehouse(id: Int!): WarehouseResult
@@ -213,7 +213,7 @@ type Query {
 type RimParams {
   bridge: Int
   height: Int
-  productId: Float!
+  nomenclatureId: Float!
   shape: RimShape
   temple: Int
   width: Int
