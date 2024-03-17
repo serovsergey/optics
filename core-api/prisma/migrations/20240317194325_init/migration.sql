@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "SingularValue" AS ENUM ('singular');
 
+-- CreateEnum
+CREATE TYPE "NomenclatureVariant" AS ENUM ('lenses', 'ready_glasses');
+
 -- CreateTable
 CREATE TABLE "constant.company_name" (
     "singular" "SingularValue" NOT NULL DEFAULT 'singular',
@@ -65,7 +68,7 @@ CREATE TABLE "catalog_types.nomenclatures" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "totals" BOOLEAN NOT NULL DEFAULT true,
-    "variants_table" VARCHAR,
+    "variants_table" "NomenclatureVariant",
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -75,11 +78,11 @@ CREATE TABLE "catalog_types.nomenclatures" (
 -- CreateTable
 CREATE TABLE "variant.lenses" (
     "id" SERIAL NOT NULL,
-    "name" VARCHAR,
-    "cyl_id" INTEGER,
+    "name" VARCHAR NOT NULL,
     "sph_id" INTEGER,
+    "cyl_id" INTEGER,
     "diameter" INTEGER,
-    "color" VARCHAR(2),
+    "tone" VARCHAR(2),
 
     CONSTRAINT "variant.lenses_pkey" PRIMARY KEY ("id")
 );
@@ -87,9 +90,10 @@ CREATE TABLE "variant.lenses" (
 -- CreateTable
 CREATE TABLE "variant.ready_glasses" (
     "id" SERIAL NOT NULL,
+    "name" VARCHAR NOT NULL,
     "sph_id" INTEGER,
     "pd" INTEGER,
-    "color" VARCHAR(2),
+    "tone" VARCHAR(2),
 
     CONSTRAINT "variant.ready_glasses_pkey" PRIMARY KEY ("id")
 );
@@ -164,12 +168,12 @@ CREATE TABLE "document.purchase_invoices" (
     "id" SERIAL NOT NULL,
     "date" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "num" VARCHAR NOT NULL,
-    "partner_id" INTEGER,
-    "warehouse_id" INTEGER,
+    "partner_id" INTEGER NOT NULL,
+    "warehouse_id" INTEGER NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "author_id" INTEGER,
-    "total" DOUBLE PRECISION,
+    "author_id" INTEGER NOT NULL,
+    "total" DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     "is_posted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "document.purchase_invoices_pkey" PRIMARY KEY ("id")
@@ -181,9 +185,9 @@ CREATE TABLE "document.purchase_invoices._items" (
     "invoice_id" INTEGER,
     "nomenclature_id" INTEGER,
     "variant_id" INTEGER,
-    "quantity" INTEGER,
-    "price" DOUBLE PRECISION,
-    "total" DOUBLE PRECISION,
+    "quantity" INTEGER NOT NULL,
+    "price" DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    "total" DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -230,10 +234,10 @@ ALTER TABLE "catalog.employees" ADD CONSTRAINT "catalog.employees_parent_id_fkey
 ALTER TABLE "catalog.employees" ADD CONSTRAINT "catalog.employees_positionId_fkey" FOREIGN KEY ("positionId") REFERENCES "list.positions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "variant.lenses" ADD CONSTRAINT "variant.lenses_cyl_id_fkey" FOREIGN KEY ("cyl_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "variant.lenses" ADD CONSTRAINT "variant.lenses_sph_id_fkey" FOREIGN KEY ("sph_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "variant.lenses" ADD CONSTRAINT "variant.lenses_sph_id_fkey" FOREIGN KEY ("sph_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "variant.lenses" ADD CONSTRAINT "variant.lenses_cyl_id_fkey" FOREIGN KEY ("cyl_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "variant.ready_glasses" ADD CONSTRAINT "variant.ready_glasses_sph_id_fkey" FOREIGN KEY ("sph_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;

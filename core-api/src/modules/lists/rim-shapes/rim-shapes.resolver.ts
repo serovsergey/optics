@@ -3,6 +3,9 @@ import { RimShapesService } from './rim-shapes.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Inject, LoggerService } from '@nestjs/common';
 import { RimShape } from './models/rim-shape.model';
+import { ListOptionsPipe } from 'pipes';
+import { Prisma } from '@prisma/client';
+import { ListOptions } from 'types';
 
 @Resolver()
 export class RimShapesResolver {
@@ -28,8 +31,20 @@ export class RimShapesResolver {
   }
 
   @Query(() => [RimShape], { name: 'rimShapes' })
-  getRimShapes(): Promise<RimShape[]> {
-    return this.rimShapeService.findMany({});
+  getRimShapes(
+    @Args(
+      { name: 'options', nullable: true },
+      new ListOptionsPipe<
+        Prisma.RimShapeWhereInput,
+        Prisma.RimShapeOrderByWithRelationInput
+      >(),
+    )
+    options: ListOptions<
+      Prisma.RimShapeWhereInput,
+      Prisma.RimShapeOrderByWithRelationInput
+    >,
+  ): Promise<RimShape[]> {
+    return this.rimShapeService.findMany(options);
   }
 
   @Mutation(() => RimShape, { name: 'createRimShape' })

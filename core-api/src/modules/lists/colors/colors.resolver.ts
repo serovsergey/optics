@@ -3,6 +3,9 @@ import { ColorsService } from './colors.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Inject, LoggerService } from '@nestjs/common';
 import { Color } from './models/color.model';
+import { ListOptionsPipe } from 'pipes';
+import { Prisma } from '@prisma/client';
+import { ListOptions } from 'types';
 
 @Resolver()
 export class ColorsResolver {
@@ -28,8 +31,20 @@ export class ColorsResolver {
   }
 
   @Query(() => [Color], { name: 'colors' })
-  getColors(): Promise<Color[]> {
-    return this.colorsService.findMany({});
+  getColors(
+    @Args(
+      { name: 'options', nullable: true },
+      new ListOptionsPipe<
+        Prisma.ColorWhereInput,
+        Prisma.ColorOrderByWithRelationInput
+      >(),
+    )
+    options: ListOptions<
+      Prisma.ColorWhereInput,
+      Prisma.ColorOrderByWithRelationInput
+    >,
+  ): Promise<Color[]> {
+    return this.colorsService.findMany(options);
   }
 
   @Mutation(() => Color, { name: 'createColor' })

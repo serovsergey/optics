@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export const seedVariantLenses = async (prisma: PrismaClient) => {
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: 0.00, D: 75',
       sph: {
@@ -14,7 +14,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
     },
   });
 
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +0.25, D: 65',
       sph: {
@@ -26,7 +26,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +0.50, D: 65',
       sph: {
@@ -38,7 +38,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +0.75, D: 65',
       sph: {
@@ -50,7 +50,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +1.00, D: 65',
       sph: {
@@ -62,7 +62,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +1.25, D: 65',
       sph: {
@@ -74,7 +74,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +1.50, D: 65',
       sph: {
@@ -86,7 +86,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +1.75, D: 65',
       sph: {
@@ -98,7 +98,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +2.00, D: 65',
       sph: {
@@ -110,7 +110,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +2.25, D: 65',
       sph: {
@@ -122,7 +122,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +2.50, D: 65',
       sph: {
@@ -134,7 +134,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +2.75, D: 65',
       sph: {
@@ -146,7 +146,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +3.00, D: 65',
       sph: {
@@ -158,7 +158,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +3.25, D: 65',
       sph: {
@@ -170,7 +170,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +3.50, D: 65',
       sph: {
@@ -182,7 +182,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +3.75, D: 65',
       sph: {
@@ -194,7 +194,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 65,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: +4.00, D: 65',
       sph: {
@@ -207,7 +207,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
     },
   });
 
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -0.25, D: 65',
       sph: {
@@ -219,7 +219,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -0.50, D: 75',
       sph: {
@@ -231,7 +231,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -0.75, D: 75',
       sph: {
@@ -243,7 +243,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -1.00, D: 75',
       sph: {
@@ -255,7 +255,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -1.25, D: 75',
       sph: {
@@ -267,7 +267,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -1.50, D: 75',
       sph: {
@@ -279,7 +279,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -1.75, D: 75',
       sph: {
@@ -291,7 +291,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -2.00, D: 75',
       sph: {
@@ -303,7 +303,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -2.25, D: 75',
       sph: {
@@ -315,7 +315,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -2.50, D: 75',
       sph: {
@@ -327,7 +327,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -2.75, D: 75',
       sph: {
@@ -339,7 +339,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -3.00, D: 75',
       sph: {
@@ -351,7 +351,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -3.25, D: 75',
       sph: {
@@ -363,7 +363,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -3.50, D: 75',
       sph: {
@@ -375,7 +375,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -3.75, D: 75',
       sph: {
@@ -387,7 +387,7 @@ export const seedVariantLenses = async (prisma: PrismaClient) => {
       diameter: 75,
     },
   });
-  await prisma.variant_Lenses.create({
+  await prisma.variant_Lens.create({
     data: {
       name: 'Sph: -4.00, D: 75',
       sph: {

@@ -52,10 +52,10 @@ type Diopter {
 type Employee {
   createdAt: DateTime!
   description: String
-  id: Int!
+  id: Float!
   isFolder: Boolean!
   name: String!
-  parentId: Int
+  parentId: Float
   updatedAt: DateTime!
 }
 
@@ -70,10 +70,10 @@ type EmployeeResult {
   childrenCount: Int!
   createdAt: DateTime!
   description: String
-  id: Int!
+  id: Float!
   isFolder: Boolean!
   name: String!
-  parentId: Int
+  parentId: Float
   updatedAt: DateTime!
 }
 
@@ -104,9 +104,11 @@ type Mutation {
   createColor(value: String!): Color!
   createDiopter(value: String!): Diopter!
   createEmployee(data: EmployeeCreateInput!): Employee!
+  createLensVariant(data: VariantLensInput!): VariantLens!
   createNomenclature(data: NomenclatureCreateInput!): Nomenclature!
   createPartner(data: PartnerCreateInput!): Partner!
   createPosition(value: String!): Position!
+  createReadyGlassesVariant(data: VariantReadyGlassesInput!): VariantReadyGlasses!
   createRimShape(value: String!): RimShape!
   createWarehouse(data: WarehouseCreateInput!): Warehouse!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
@@ -116,10 +118,14 @@ type Mutation {
   deleteDiopters(ids: [Int!]!): Int!
   deleteEmployee(id: Int!): Employee!
   deleteEmployees(ids: [Int!]!): Int!
+  deleteLensVariant(id: Int!): VariantLens!
+  deleteLensVariants(ids: [Int!]!): Int!
   deletePartner(id: Int!): Partner!
   deletePartners(ids: [Int!]!): Int!
   deletePosition(id: Int!): Position!
   deletePositions(ids: [Int!]!): Int!
+  deleteReadyGlassesVariant(id: Int!): VariantReadyGlasses!
+  deleteReadyGlassesVariants(ids: [Int!]!): Int!
   deleteRimShape(id: Int!): RimShape!
   deleteRimShapes(ids: [Int!]!): Int!
   deleteWarehouse(id: Int!): Warehouse!
@@ -129,8 +135,10 @@ type Mutation {
   updateColor(id: Int!, value: String!): Color!
   updateDiopter(id: Int!, value: String!): Diopter!
   updateEmployee(data: EmployeeCreateInput!, id: Int!): Employee!
+  updateLensVariant(data: VariantLensInput!, id: Int!): VariantLens!
   updatePartner(data: PartnerCreateInput!, id: Int!): Partner!
   updatePosition(id: Int!, value: String!): Position!
+  updateReadyGlassesVariant(data: VariantReadyGlassesInput!, id: Int!): VariantReadyGlasses!
   updateRimShape(id: Int!, value: String!): RimShape!
   updateWarehouse(data: WarehouseCreateInput!, id: Int!): Warehouse!
 }
@@ -205,23 +213,55 @@ type Position {
   value: String!
 }
 
+type PurchaseInvoice {
+  author: Employee!
+  createdAt: DateTime!
+  date: DateTime!
+  id: Int!
+  isPosted: Boolean!
+  items: [PurchaseInvoiceItem!]
+  num: String!
+  partnerId: Int
+  total: Float!
+  updatedAt: DateTime!
+  warehouse: Warehouse!
+}
+
+type PurchaseInvoiceItem {
+  createdAt: DateTime!
+  id: Int!
+  nomenclature: Nomenclature
+  nomenclatureId: Int!
+  price: Float!
+  purchaseInvoiceId: Int!
+  quantity: Int!
+  total: Float!
+  updatedAt: DateTime!
+  variantId: Int
+}
+
 type Query {
   color(id: Int!): Color
-  colors: [Color!]!
+  colors(options: ListOptions): [Color!]!
   constants(date: DateTime): Constants
   diopter(id: Int!): Diopter
-  diopters: [Diopter!]!
+  diopters(options: ListOptions): [Diopter!]!
   employee(id: Int!): EmployeeResult
   employees(options: ListOptions, parentId: Int): [EmployeeResult!]!
   health: String!
+  lensVariant(id: Int!): VariantLens
+  lensVariants(options: ListOptions): [VariantLens!]!
   nomenclature(id: Int!): NomenclatureResult
   nomenclatures(options: ListOptions, parentId: Int): [NomenclatureResult!]!
   partner(id: Int!): PartnerResult
   partners(options: ListOptions, parentId: Int): [PartnerResult!]!
   position(id: Int!): Position
-  positions: [Position!]!
+  positions(options: ListOptions): [Position!]!
+  purchaseInvoice(id: Int!): PurchaseInvoice
+  readyGlassesVariant(id: Int!): VariantReadyGlasses
+  readyGlassesVariants(options: ListOptions): [VariantReadyGlasses!]!
   rimShape(id: Int!): RimShape
-  rimShapes: [RimShape!]!
+  rimShapes(options: ListOptions): [RimShape!]!
   warehouse(id: Int!): WarehouseResult
   warehouses(options: ListOptions, parentId: Int): [WarehouseResult!]!
 }
@@ -246,6 +286,38 @@ input RimParamsInput {
 type RimShape {
   id: Int!
   value: String!
+}
+
+type VariantLens {
+  cyl: Diopter
+  diameter: Float
+  id: Float!
+  name: String!
+  sph: Diopter
+  tone: String
+}
+
+input VariantLensInput {
+  cylId: Float
+  diameter: Float
+  name: String!
+  sphId: Float
+  tone: String
+}
+
+type VariantReadyGlasses {
+  id: Float!
+  name: String!
+  pd: Float
+  sph: Diopter
+  tone: String
+}
+
+input VariantReadyGlassesInput {
+  name: String!
+  pd: Float
+  sphId: Float!
+  tone: String
 }
 
 type Warehouse {

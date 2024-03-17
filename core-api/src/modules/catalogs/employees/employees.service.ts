@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'modules/service/database/prisma.service';
+import { extractChildrenCount } from 'utils';
 
 @Injectable()
 export class EmployeesService {
@@ -11,17 +12,20 @@ export class EmployeesService {
   };
 
   async findOne(options: Prisma.EmployeeFindUniqueArgs) {
-    return this.prisma.employee.findUnique({
-      ...options,
-      include: this.include,
-    });
+    return extractChildrenCount(
+      await this.prisma.employee.findUnique({
+        ...options,
+        include: this.include,
+      }),
+    );
   }
 
   async findMany(options: Prisma.EmployeeFindManyArgs) {
-    return this.prisma.employee.findMany({
+    const employees = await this.prisma.employee.findMany({
       ...options,
       include: this.include,
     });
+    return employees.map(extractChildrenCount);
   }
 
   async create(data: Prisma.EmployeeCreateInput) {

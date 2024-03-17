@@ -3,6 +3,9 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Inject, LoggerService } from '@nestjs/common';
 import { Position } from './models/position.model';
 import { PositionsService } from './positions.service';
+import { ListOptionsPipe } from 'pipes';
+import { Prisma } from '@prisma/client';
+import { ListOptions } from 'types';
 
 @Resolver()
 export class PositionsResolver {
@@ -28,8 +31,20 @@ export class PositionsResolver {
   }
 
   @Query(() => [Position], { name: 'positions' })
-  getPositions(): Promise<Position[]> {
-    return this.positionsService.findMany({});
+  getPositions(
+    @Args(
+      { name: 'options', nullable: true },
+      new ListOptionsPipe<
+        Prisma.PositionWhereInput,
+        Prisma.PositionOrderByWithRelationInput
+      >(),
+    )
+    options: ListOptions<
+      Prisma.PositionWhereInput,
+      Prisma.PositionOrderByWithRelationInput
+    >,
+  ): Promise<Position[]> {
+    return this.positionsService.findMany(options);
   }
 
   @Mutation(() => Position, { name: 'createPosition' })

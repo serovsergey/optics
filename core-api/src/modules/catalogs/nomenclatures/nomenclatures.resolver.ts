@@ -17,6 +17,7 @@ export class NomenclaturesResolver {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {}
+
   @Query(() => [NomenclatureResult], { name: 'nomenclatures' })
   async getNomenclatures(
     @Args('parentId', { nullable: true, type: () => Int })

@@ -4,7 +4,6 @@ import { Inject, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Prisma } from '@prisma/client';
 import { EmployeeResult } from './dto/employee-result';
-import { extractChildrenCount } from 'utils';
 import { ListOptionsPipe } from 'pipes';
 import { ListOptions } from 'types';
 import { Employee } from './models/employee.model';
@@ -38,7 +37,7 @@ export class EmployeesResolver {
       ...options,
       where: { ...options.where, parentId },
     });
-    return employees.map(extractChildrenCount);
+    return employees;
   }
 
   @Query(() => EmployeeResult, { name: 'employee', nullable: true })
@@ -50,7 +49,7 @@ export class EmployeesResolver {
       this.logger.warn(`Employee with id ${id} not found`);
       return null;
     }
-    return extractChildrenCount(employee);
+    return employee;
   }
 
   @Mutation(() => Employee, { name: 'createEmployee' })

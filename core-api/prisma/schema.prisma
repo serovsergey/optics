@@ -11,6 +11,11 @@ enum SingularValue {
   singular
 }
 
+enum NomenclatureVariant {
+  lenses
+  ready_glasses
+}
+
 model const_CompanyName {
   singular SingularValue @unique @default(singular)
   date     DateTime      @unique @default(now()) @updatedAt @db.Timestamptz(6)
@@ -46,8 +51,8 @@ model RimShape {
 model Diopter {
   id                      Int                    @id @default(autoincrement())
   value                   String                 @unique @db.VarChar
-  variantsLensSph         Variant_Lenses[]       @relation("variantsLensSph")
-  variantsLensCyl         Variant_Lenses[]       @relation("variantsLensCyl")
+  variantsLensSph         Variant_Lens[]         @relation("variantsLensSph")
+  variantsLensCyl         Variant_Lens[]         @relation("variantsLensCyl")
   variantsReadyGlassesSph Variant_ReadyGlasses[] @relation("variantsReadyGlassesSph")
 
   @@map("list.diopters")
@@ -80,12 +85,13 @@ model Employee {
 }
 
 model NomenclatureType {
-  id            Int            @id @default(autoincrement())
-  name          String         @db.VarChar
-  totals        Boolean        @default(true)
-  variantsTable String?        @map("variants_table") @db.VarChar
-  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime       @default(now()) @map("updated_at") @db.Timestamptz(6)
+  id            Int                  @id @default(autoincrement())
+  name          String               @db.VarChar
+  totals        Boolean              @default(true)
+  variantsTable NomenclatureVariant? @map("variants_table")
+  // variantsTable String?        @map("variants_table") @db.VarChar
+  createdAt     DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime             @default(now()) @map("updated_at") @db.Timestamptz(6)
   // variantsLenses       Variant_Lenses[]
   // variantsReadyGlasses Variant_ReadyGlasses[]
   Nomenclature  Nomenclature[]
@@ -93,17 +99,17 @@ model NomenclatureType {
   @@map("catalog_types.nomenclatures")
 }
 
-model Variant_Lenses {
+model Variant_Lens {
   id       Int      @id @default(autoincrement())
   // nomenclatureTypeId Int?              @map("nomenclature_type_id")
   // nomenclatureType   NomenclatureType? @relation(fields: [nomenclatureTypeId], references: [id], onDelete: Restrict)
-  cyl      Diopter? @relation("variantsLensCyl", fields: [cylId], references: [id])
-  name     String?  @db.VarChar
-  cylId    Int?     @map("cyl_id")
+  name     String   @db.VarChar
   sph      Diopter? @relation("variantsLensSph", fields: [sphId], references: [id])
   sphId    Int?     @map("sph_id")
+  cyl      Diopter? @relation("variantsLensCyl", fields: [cylId], references: [id])
+  cylId    Int?     @map("cyl_id")
   diameter Int?
-  color    String?  @db.VarChar(2)
+  tone     String?  @db.VarChar(2)
 
   @@map("variant.lenses")
 }
@@ -112,10 +118,11 @@ model Variant_ReadyGlasses {
   id    Int      @id @default(autoincrement())
   // nomenclatureTypeId Int?              @map("nomenclature_type_id")
   // nomenclatureType   NomenclatureType? @relation(fields: [nomenclatureTypeId], references: [id], onDelete: Restrict)
+  name  String   @db.VarChar
   sph   Diopter? @relation("variantsReadyGlassesSph", fields: [sphId], references: [id])
   sphId Int?     @map("sph_id")
   pd    Int?
-  color String?  @db.VarChar(2)
+  tone  String?  @db.VarChar(2)
 
   @@map("variant.ready_glasses")
 }
@@ -204,20 +211,20 @@ model Warehouse {
 }
 
 model PurchaseInvoice {
-  id                   Int                   @id @default(autoincrement())
-  date                 DateTime              @default(now()) @map("date") @db.Timestamptz(6)
-  num                  String                @db.VarChar
-  partnerId            Int?                  @map("partner_id")
-  partner              Partner?              @relation(fields: [partnerId], references: [id], onDelete: Restrict)
-  warehouseId          Int?                  @map("warehouse_id")
-  warehouse            Warehouse?            @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
-  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt            DateTime              @default(now()) @map("updated_at") @db.Timestamptz(6)
-  authorId             Int?                  @map("author_id")
-  author               Employee?             @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  total                Float?
-  isPosted             Boolean               @default(false) @map("is_posted")
-  purchaseInvoiceItems PurchaseInvoiceItem[]
+  id          Int                   @id @default(autoincrement())
+  date        DateTime              @default(now()) @map("date") @db.Timestamptz(6)
+  num         String                @db.VarChar
+  partnerId   Int                   @map("partner_id")
+  partner     Partner               @relation(fields: [partnerId], references: [id], onDelete: Restrict)
+  warehouseId Int                   @map("warehouse_id")
+  warehouse   Warehouse             @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  createdAt   DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime              @default(now()) @map("updated_at") @db.Timestamptz(6)
+  authorId    Int                   @map("author_id")
+  author      Employee              @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  total       Decimal               @default(0.00) @db.Decimal(12, 2)
+  isPosted    Boolean               @default(false) @map("is_posted")
+  items       PurchaseInvoiceItem[]
 
   @@map("document.purchase_invoices")
 }
@@ -229,9 +236,9 @@ model PurchaseInvoiceItem {
   nomenclatureId Int?             @map("nomenclature_id")
   nomenclature   Nomenclature?    @relation(fields: [nomenclatureId], references: [id], onDelete: Restrict)
   variantId      Int?             @map("variant_id")
-  quantity       Int?
-  price          Float?
-  total          Float?
+  quantity       Int
+  price          Decimal          @default(0.00) @db.Decimal(12, 2)
+  total          Decimal          @default(0.00) @db.Decimal(12, 2)
   createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
 

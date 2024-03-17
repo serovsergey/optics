@@ -3,6 +3,9 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { DioptersService } from './diopters.service';
 import { Diopter } from './models/diopter.model';
+import { Prisma } from '@prisma/client';
+import { ListOptionsPipe } from 'pipes';
+import { ListOptions } from 'types';
 
 @Resolver()
 export class DioptersResolver {
@@ -28,8 +31,20 @@ export class DioptersResolver {
   }
 
   @Query(() => [Diopter], { name: 'diopters' })
-  getDiopters(): Promise<Diopter[]> {
-    return this.dioptersService.findMany({});
+  getDiopters(
+    @Args(
+      { name: 'options', nullable: true },
+      new ListOptionsPipe<
+        Prisma.DiopterWhereInput,
+        Prisma.DiopterOrderByWithRelationInput
+      >(),
+    )
+    options: ListOptions<
+      Prisma.DiopterWhereInput,
+      Prisma.DiopterOrderByWithRelationInput
+    >,
+  ): Promise<Diopter[]> {
+    return this.dioptersService.findMany(options);
   }
 
   @Mutation(() => Diopter, { name: 'createDiopter' })
