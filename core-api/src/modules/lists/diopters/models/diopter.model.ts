@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class ListItem {
+export class Diopter {
   @Field(() => Int)
   id: number;
 

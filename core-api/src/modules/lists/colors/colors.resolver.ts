@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ColorsService } from './colors.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Inject, LoggerService } from '@nestjs/common';
-import { ListItem } from '../list-item.model';
+import { Color } from './models/color.model';
 
 @Resolver()
 export class ColorsResolver {
@@ -12,10 +12,10 @@ export class ColorsResolver {
     private readonly logger: LoggerService,
   ) {}
 
-  @Query(() => ListItem, { name: 'color', nullable: true })
+  @Query(() => Color, { name: 'color', nullable: true })
   async getColor(
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<ListItem> {
+  ): Promise<Color> {
     const color = await this.colorsService.findOne({
       where: { id },
     });
@@ -27,28 +27,28 @@ export class ColorsResolver {
     return color;
   }
 
-  @Query(() => [ListItem], { name: 'colors' })
-  getColors(): Promise<ListItem[]> {
+  @Query(() => [Color], { name: 'colors' })
+  getColors(): Promise<Color[]> {
     return this.colorsService.findMany({});
   }
 
-  @Mutation(() => ListItem, { name: 'createColor' })
-  createColor(@Args('value') value: string): Promise<ListItem> {
+  @Mutation(() => Color, { name: 'createColor' })
+  createColor(@Args('value') value: string): Promise<Color> {
     return this.colorsService.create({ value });
   }
 
-  @Mutation(() => ListItem, { name: 'updateColor' })
+  @Mutation(() => Color, { name: 'updateColor' })
   updateColor(
     @Args({ name: 'id', type: () => Int }) id: number,
     @Args('value') value: string,
-  ): Promise<ListItem> {
+  ): Promise<Color> {
     return this.colorsService.update({ data: { value }, where: { id } });
   }
 
-  @Mutation(() => ListItem, { name: 'deleteColor' })
+  @Mutation(() => Color, { name: 'deleteColor' })
   deleteColor(
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<ListItem> {
+  ): Promise<Color> {
     return this.colorsService.delete({ where: { id } });
   }
 

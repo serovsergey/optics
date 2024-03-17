@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RimShapesService } from './rim-shapes.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Inject, LoggerService } from '@nestjs/common';
-import { ListItem } from '../list-item.model';
+import { RimShape } from './models/rim-shape.model';
 
 @Resolver()
 export class RimShapesResolver {
@@ -12,10 +12,10 @@ export class RimShapesResolver {
     private readonly logger: LoggerService,
   ) {}
 
-  @Query(() => ListItem, { name: 'rimShape', nullable: true })
+  @Query(() => RimShape, { name: 'rimShape', nullable: true })
   async getRimShape(
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<ListItem> {
+  ): Promise<RimShape> {
     const rimShape = await this.rimShapeService.findOne({
       where: { id },
     });
@@ -27,28 +27,28 @@ export class RimShapesResolver {
     return rimShape;
   }
 
-  @Query(() => [ListItem], { name: 'rimShapes' })
-  getRimShapes(): Promise<ListItem[]> {
+  @Query(() => [RimShape], { name: 'rimShapes' })
+  getRimShapes(): Promise<RimShape[]> {
     return this.rimShapeService.findMany({});
   }
 
-  @Mutation(() => ListItem, { name: 'createRimShape' })
-  createRimShape(@Args('value') value: string): Promise<ListItem> {
+  @Mutation(() => RimShape, { name: 'createRimShape' })
+  createRimShape(@Args('value') value: string): Promise<RimShape> {
     return this.rimShapeService.create({ value });
   }
 
-  @Mutation(() => ListItem, { name: 'updateRimShape' })
+  @Mutation(() => RimShape, { name: 'updateRimShape' })
   updateRimShape(
     @Args({ name: 'id', type: () => Int }) id: number,
     @Args('value') value: string,
-  ): Promise<ListItem> {
+  ): Promise<RimShape> {
     return this.rimShapeService.update({ data: { value }, where: { id } });
   }
 
-  @Mutation(() => ListItem, { name: 'deleteRimShape' })
+  @Mutation(() => RimShape, { name: 'deleteRimShape' })
   deleteRimShape(
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<ListItem> {
+  ): Promise<RimShape> {
     return this.rimShapeService.delete({ where: { id } });
   }
 
