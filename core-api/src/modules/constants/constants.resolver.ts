@@ -47,16 +47,16 @@ export class ConstantsResolver {
   }
 
   @Mutation(() => CompanyName)
-  updateCompanyName(@Args('value') value: string): Promise<CompanyName> {
-    return this.constantsService.updateCompanyName(value);
+  setCompanyName(@Args('value') value: string): Promise<CompanyName> {
+    return this.constantsService.setCompanyName(value);
   }
 
   @Mutation(() => AccountantHistory)
-  updateAccountant(
+  setAccountant(
     @Args('employeeId') employeeId: number,
     @Args('date', { nullable: true }) date: Date = new Date(),
   ): Promise<AccountantHistory> {
-    return this.constantsService.updateAccountant(employeeId, date);
+    return this.constantsService.setAccountant(employeeId, date);
   }
 
   @Mutation(() => Boolean)

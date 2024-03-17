@@ -10,7 +10,7 @@ export class ConstantsService {
     return this.prisma.const_CompanyName.findFirst();
   }
 
-  updateCompanyName(value: string) {
+  setCompanyName(value: string) {
     return this.prisma.const_CompanyName.upsert({
       where: { singular: SingularValue.singular },
       update: { value },
@@ -33,7 +33,7 @@ export class ConstantsService {
     });
   }
 
-  updateAccountant(employeeId: number, date: Date = new Date()) {
+  setAccountant(employeeId: number, date: Date = new Date()) {
     return this.prisma.const_Accountant.upsert({
       where: { date },
       update: { employeeId },
