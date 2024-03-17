@@ -5,7 +5,7 @@ import { PrismaService } from 'modules/service/database/prisma.service';
 @Injectable()
 export class VariantReadyGlassesService {
   constructor(private prisma: PrismaService) {}
-  private include = { sph: true, cyl: true };
+  private readonly include = { sph: true, cyl: true };
 
   findOne(options: Prisma.Variant_ReadyGlassesFindUniqueArgs) {
     return this.prisma.variant_ReadyGlasses.findUnique({

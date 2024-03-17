@@ -14,8 +14,8 @@ export class PurchaseInvoice {
   @Field()
   num: string;
 
-  @Field(() => Int, { nullable: true })
-  partnerId?: number;
+  @Field(() => Int)
+  partnerId: number;
 
   @Field(() => Warehouse)
   warehouse: Warehouse;
@@ -29,7 +29,7 @@ export class PurchaseInvoice {
   @Field()
   isPosted: boolean;
 
-  @Field(() => [PurchaseInvoiceItem], { name: 'items', nullable: true })
+  @Field(() => [PurchaseInvoiceItem], { nullable: true })
   items?: PurchaseInvoiceItem[];
 
   @Field()

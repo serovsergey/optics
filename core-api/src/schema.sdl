@@ -108,6 +108,7 @@ type Mutation {
   createNomenclature(data: NomenclatureCreateInput!): Nomenclature!
   createPartner(data: PartnerCreateInput!): Partner!
   createPosition(value: String!): Position!
+  createPurchaseInvoice(data: PurchaseInvoiceCreateInput!): PurchaseInvoice!
   createReadyGlassesVariant(data: VariantReadyGlassesInput!): VariantReadyGlasses!
   createRimShape(value: String!): RimShape!
   createWarehouse(data: WarehouseCreateInput!): Warehouse!
@@ -221,10 +222,21 @@ type PurchaseInvoice {
   isPosted: Boolean!
   items: [PurchaseInvoiceItem!]
   num: String!
-  partnerId: Int
+  partnerId: Int!
   total: Float!
   updatedAt: DateTime!
   warehouse: Warehouse!
+}
+
+input PurchaseInvoiceCreateInput {
+  authorId: Float!
+  date: DateTime!
+  isPosted: Boolean
+  items: [PurchaseInvoiceItemInput!]
+  num: String!
+  partnerId: Int
+  total: Float
+  warehouseId: Float!
 }
 
 type PurchaseInvoiceItem {
@@ -237,6 +249,14 @@ type PurchaseInvoiceItem {
   quantity: Int!
   total: Float!
   updatedAt: DateTime!
+  variantId: Int
+}
+
+input PurchaseInvoiceItemInput {
+  nomenclatureId: Int!
+  price: Float!
+  quantity: Int!
+  total: Float!
   variantId: Int
 }
 
@@ -258,6 +278,7 @@ type Query {
   position(id: Int!): Position
   positions(options: ListOptions): [Position!]!
   purchaseInvoice(id: Int!): PurchaseInvoice
+  purchaseInvoices(options: ListOptions): [PurchaseInvoice!]!
   readyGlassesVariant(id: Int!): VariantReadyGlasses
   readyGlassesVariants(options: ListOptions): [VariantReadyGlasses!]!
   rimShape(id: Int!): RimShape

@@ -6,7 +6,7 @@ import { PrismaService } from 'modules/service/database/prisma.service';
 export class NomenclaturesService {
   constructor(private prisma: PrismaService) {}
 
-  private include = {
+  private readonly include = {
     appearance: { include: { color: true } },
     lensParams: true,
     rimParams: { include: { shape: true } },

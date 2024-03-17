@@ -10,25 +10,25 @@ import { Nomenclature } from 'modules/catalogs/nomenclatures/models/nomenclature
 @ObjectType()
 export class PurchaseInvoiceItem {
   @Field(() => Int)
-  id: PurchaseInvoiceItemPrisma['id'];
+  id: number;
 
   @Field(() => Int)
-  purchaseInvoiceId: PurchaseInvoiceItemPrisma['invoiceId'];
+  purchaseInvoiceId: number;
 
   @Field(() => Int)
-  nomenclatureId: PurchaseInvoiceItemPrisma['nomenclatureId'];
+  nomenclatureId: number;
 
   @Field(() => Int, { nullable: true })
-  variantId: PurchaseInvoiceItemPrisma['variantId'];
+  variantId: number;
 
   @Field(() => Int)
-  quantity?: PurchaseInvoiceItemPrisma['quantity'];
+  quantity: number;
 
   @Field(() => Float)
-  price?: PurchaseInvoiceItemPrisma['price'];
+  price: PurchaseInvoiceItemPrisma['price'];
 
   @Field(() => Float)
-  total?: PurchaseInvoiceItemPrisma['total'];
+  total: PurchaseInvoiceItemPrisma['total'];
 
   @Field(() => Nomenclature, { nullable: true })
   nomenclature: Nomenclature;

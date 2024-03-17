@@ -5,7 +5,7 @@ import { PrismaService } from 'modules/service/database/prisma.service';
 @Injectable()
 export class VariantLensesService {
   constructor(private prisma: PrismaService) {}
-  private include = { cyl: true, sph: true };
+  private readonly include = { cyl: true, sph: true };
 
   findOne(options: Prisma.Variant_LensFindUniqueArgs) {
     return this.prisma.variant_Lens.findUnique({

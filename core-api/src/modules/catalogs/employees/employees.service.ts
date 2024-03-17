@@ -7,7 +7,7 @@ import { extractChildrenCount } from 'utils';
 export class EmployeesService {
   constructor(private prisma: PrismaService) {}
 
-  private include = {
+  private readonly include = {
     _count: { select: { children: true } },
   };
 

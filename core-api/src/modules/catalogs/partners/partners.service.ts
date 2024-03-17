@@ -6,7 +6,7 @@ import { PrismaService } from 'modules/service/database/prisma.service';
 export class PartnersService {
   constructor(private prisma: PrismaService) {}
 
-  private include = {
+  private readonly include = {
     _count: { select: { children: true } },
   };
 
