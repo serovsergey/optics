@@ -39,12 +39,21 @@ CREATE TABLE "list.diopters" (
 );
 
 -- CreateTable
+CREATE TABLE "list.positions" (
+    "id" SERIAL NOT NULL,
+    "value" VARCHAR NOT NULL,
+
+    CONSTRAINT "list.positions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "catalog.employees" (
     "id" SERIAL NOT NULL,
     "parent_id" INTEGER,
     "is_folder" BOOLEAN NOT NULL DEFAULT false,
     "name" VARCHAR NOT NULL,
     "description" VARCHAR,
+    "positionId" INTEGER,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -55,7 +64,7 @@ CREATE TABLE "catalog.employees" (
 CREATE TABLE "catalog_types.nomenclatures" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
-    "countable" BOOLEAN NOT NULL DEFAULT true,
+    "totals" BOOLEAN NOT NULL DEFAULT true,
     "variants_table" VARCHAR,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -64,30 +73,25 @@ CREATE TABLE "catalog_types.nomenclatures" (
 );
 
 -- CreateTable
-CREATE TABLE "variants.lens" (
+CREATE TABLE "variant.lenses" (
     "id" SERIAL NOT NULL,
-    "nomenclature_id" INTEGER,
-    "cyl" DOUBLE PRECISION,
-    "sph" DOUBLE PRECISION,
+    "name" VARCHAR,
+    "cyl_id" INTEGER,
+    "sph_id" INTEGER,
     "diameter" INTEGER,
     "color" VARCHAR(2),
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "variants.lens_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "variant.lenses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "variants.ready_glass" (
+CREATE TABLE "variant.ready_glasses" (
     "id" SERIAL NOT NULL,
-    "nomenclature_id" INTEGER,
-    "sph" DOUBLE PRECISION,
+    "sph_id" INTEGER,
     "pd" INTEGER,
-    "lensColor" VARCHAR(2),
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "color" VARCHAR(2),
 
-    CONSTRAINT "variants.ready_glass_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "variant.ready_glasses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -165,21 +169,25 @@ CREATE TABLE "document.purchase_invoices" (
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "author_id" INTEGER,
+    "total" DOUBLE PRECISION,
+    "is_posted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "document.purchase_invoices_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "document.purchase_invoices.items" (
+CREATE TABLE "document.purchase_invoices._items" (
     "id" SERIAL NOT NULL,
     "invoice_id" INTEGER,
     "nomenclature_id" INTEGER,
+    "variant_id" INTEGER,
     "quantity" INTEGER,
     "price" DOUBLE PRECISION,
+    "total" DOUBLE PRECISION,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "document.purchase_invoices.items_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "document.purchase_invoices._items_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -190,6 +198,18 @@ CREATE UNIQUE INDEX "constant.company_name_date_key" ON "constant.company_name"(
 
 -- CreateIndex
 CREATE UNIQUE INDEX "constant.accountant_date_key" ON "constant.accountant"("date");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "list.colors_value_key" ON "list.colors"("value");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "list.rim_shapes_value_key" ON "list.rim_shapes"("value");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "list.diopters_value_key" ON "list.diopters"("value");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "list.positions_value_key" ON "list.positions"("value");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "catalog.nomenclatures.appearance_nomenclature_id_key" ON "catalog.nomenclatures.appearance"("nomenclature_id");
@@ -207,10 +227,16 @@ ALTER TABLE "constant.accountant" ADD CONSTRAINT "constant.accountant_employeeId
 ALTER TABLE "catalog.employees" ADD CONSTRAINT "catalog.employees_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "catalog.employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "variants.lens" ADD CONSTRAINT "variants.lens_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "catalog.employees" ADD CONSTRAINT "catalog.employees_positionId_fkey" FOREIGN KEY ("positionId") REFERENCES "list.positions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "variants.ready_glass" ADD CONSTRAINT "variants.ready_glass_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "variant.lenses" ADD CONSTRAINT "variant.lenses_cyl_id_fkey" FOREIGN KEY ("cyl_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "variant.lenses" ADD CONSTRAINT "variant.lenses_sph_id_fkey" FOREIGN KEY ("sph_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "variant.ready_glasses" ADD CONSTRAINT "variant.ready_glasses_sph_id_fkey" FOREIGN KEY ("sph_id") REFERENCES "list.diopters"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "catalog.partners" ADD CONSTRAINT "catalog.partners_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "catalog.partners"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -219,7 +245,7 @@ ALTER TABLE "catalog.partners" ADD CONSTRAINT "catalog.partners_parent_id_fkey" 
 ALTER TABLE "catalog.nomenclatures" ADD CONSTRAINT "catalog.nomenclatures_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "catalog.nomenclatures" ADD CONSTRAINT "catalog.nomenclatures_type_id_fkey" FOREIGN KEY ("type_id") REFERENCES "catalog_types.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "catalog.nomenclatures" ADD CONSTRAINT "catalog.nomenclatures_type_id_fkey" FOREIGN KEY ("type_id") REFERENCES "catalog_types.nomenclatures"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "catalog.nomenclatures.appearance" ADD CONSTRAINT "catalog.nomenclatures.appearance_color_id_fkey" FOREIGN KEY ("color_id") REFERENCES "list.colors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -249,7 +275,7 @@ ALTER TABLE "document.purchase_invoices" ADD CONSTRAINT "document.purchase_invoi
 ALTER TABLE "document.purchase_invoices" ADD CONSTRAINT "document.purchase_invoices_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "catalog.employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "document.purchase_invoices.items" ADD CONSTRAINT "document.purchase_invoices.items_invoice_id_fkey" FOREIGN KEY ("invoice_id") REFERENCES "document.purchase_invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "document.purchase_invoices._items" ADD CONSTRAINT "document.purchase_invoices._items_invoice_id_fkey" FOREIGN KEY ("invoice_id") REFERENCES "document.purchase_invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "document.purchase_invoices.items" ADD CONSTRAINT "document.purchase_invoices.items_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "document.purchase_invoices._items" ADD CONSTRAINT "document.purchase_invoices._items_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

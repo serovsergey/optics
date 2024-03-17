@@ -44,6 +44,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Diopter {
+  id: Int!
+  value: String!
+}
+
 type Employee {
   createdAt: DateTime!
   description: String
@@ -88,11 +93,6 @@ input LensParamsInput {
   index: Float
 }
 
-type ListItem {
-  id: Int!
-  value: String!
-}
-
 input ListOptions {
   orderBy: JSON
   skip: Float
@@ -101,33 +101,37 @@ input ListOptions {
 }
 
 type Mutation {
-  createColor(value: String!): ListItem!
-  createDiopter(value: String!): ListItem!
+  createColor(value: String!): Color!
+  createDiopter(value: String!): Diopter!
   createEmployee(data: EmployeeCreateInput!): Employee!
   createNomenclature(data: NomenclatureCreateInput!): Nomenclature!
   createPartner(data: PartnerCreateInput!): Partner!
-  createRimShape(value: String!): ListItem!
+  createPosition(value: String!): Position!
+  createRimShape(value: String!): RimShape!
   createWarehouse(data: WarehouseCreateInput!): Warehouse!
   deleteAccountantHistoryRecord(date: DateTime!): Boolean!
-  deleteColor(id: Int!): ListItem!
+  deleteColor(id: Int!): Color!
   deleteColors(ids: [Int!]!): Int!
-  deleteDiopter(id: Int!): ListItem!
+  deleteDiopter(id: Int!): Diopter!
   deleteDiopters(ids: [Int!]!): Int!
   deleteEmployee(id: Int!): Employee!
   deleteEmployees(ids: [Int!]!): Int!
   deletePartner(id: Int!): Partner!
   deletePartners(ids: [Int!]!): Int!
-  deleteRimShape(id: Int!): ListItem!
+  deletePosition(id: Int!): Position!
+  deletePositions(ids: [Int!]!): Int!
+  deleteRimShape(id: Int!): RimShape!
   deleteRimShapes(ids: [Int!]!): Int!
   deleteWarehouse(id: Int!): Warehouse!
   deleteWarehouses(ids: [Int!]!): Int!
-  updateAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
-  updateColor(id: Int!, value: String!): ListItem!
-  updateCompanyName(value: String!): CompanyName!
-  updateDiopter(id: Int!, value: String!): ListItem!
+  setAccountant(date: DateTime, employeeId: Float!): AccountantHistory!
+  setCompanyName(value: String!): CompanyName!
+  updateColor(id: Int!, value: String!): Color!
+  updateDiopter(id: Int!, value: String!): Diopter!
   updateEmployee(data: EmployeeCreateInput!, id: Int!): Employee!
   updatePartner(data: PartnerCreateInput!, id: Int!): Partner!
-  updateRimShape(id: Int!, value: String!): ListItem!
+  updatePosition(id: Int!, value: String!): Position!
+  updateRimShape(id: Int!, value: String!): RimShape!
   updateWarehouse(data: WarehouseCreateInput!, id: Int!): Warehouse!
 }
 
@@ -196,12 +200,17 @@ type PartnerResult {
   updatedAt: DateTime!
 }
 
+type Position {
+  id: Int!
+  value: String!
+}
+
 type Query {
-  color(id: Int!): ListItem
-  colors: [ListItem!]!
+  color(id: Int!): Color
+  colors: [Color!]!
   constants(date: DateTime): Constants
-  diopter(id: Int!): ListItem
-  diopters: [ListItem!]!
+  diopter(id: Int!): Diopter
+  diopters: [Diopter!]!
   employee(id: Int!): EmployeeResult
   employees(options: ListOptions, parentId: Int): [EmployeeResult!]!
   health: String!
@@ -209,8 +218,10 @@ type Query {
   nomenclatures(options: ListOptions, parentId: Int): [NomenclatureResult!]!
   partner(id: Int!): PartnerResult
   partners(options: ListOptions, parentId: Int): [PartnerResult!]!
-  rimShape(id: Int!): ListItem
-  rimShapes: [ListItem!]!
+  position(id: Int!): Position
+  positions: [Position!]!
+  rimShape(id: Int!): RimShape
+  rimShapes: [RimShape!]!
   warehouse(id: Int!): WarehouseResult
   warehouses(options: ListOptions, parentId: Int): [WarehouseResult!]!
 }

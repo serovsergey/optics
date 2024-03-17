@@ -13,6 +13,7 @@ import { WarehousesModule } from './modules/catalogs/warehouses/warehouses.modul
 import { PurchaseInvoicesModule } from './modules/documents/purchase-invoices/purchase-invoices.module';
 import { SalesInvoicesModule } from './modules/documents/sales-invoices/sales-invoices.module';
 import { DioptersModule } from './modules/lists/diopters/diopters.module';
+import { PositionsModule } from 'modules/lists/positions/positions.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DioptersModule } from './modules/lists/diopters/diopters.module';
     PartnersModule,
     NomenclaturesModule,
     ColorsModule,
+    PositionsModule,
     RimShapesModule,
     WarehousesModule,
     PurchaseInvoicesModule,
