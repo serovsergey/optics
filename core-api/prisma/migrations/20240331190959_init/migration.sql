@@ -180,7 +180,7 @@ CREATE TABLE "document.purchase_invoices" (
 );
 
 -- CreateTable
-CREATE TABLE "document.purchase_invoices._items" (
+CREATE TABLE "document.purchase_invoices.items" (
     "id" SERIAL NOT NULL,
     "invoice_id" INTEGER,
     "nomenclature_id" INTEGER,
@@ -191,7 +191,7 @@ CREATE TABLE "document.purchase_invoices._items" (
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "document.purchase_invoices._items_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "document.purchase_invoices.items_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -279,7 +279,7 @@ ALTER TABLE "document.purchase_invoices" ADD CONSTRAINT "document.purchase_invoi
 ALTER TABLE "document.purchase_invoices" ADD CONSTRAINT "document.purchase_invoices_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "catalog.employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "document.purchase_invoices._items" ADD CONSTRAINT "document.purchase_invoices._items_invoice_id_fkey" FOREIGN KEY ("invoice_id") REFERENCES "document.purchase_invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "document.purchase_invoices.items" ADD CONSTRAINT "document.purchase_invoices.items_invoice_id_fkey" FOREIGN KEY ("invoice_id") REFERENCES "document.purchase_invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "document.purchase_invoices._items" ADD CONSTRAINT "document.purchase_invoices._items_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "document.purchase_invoices.items" ADD CONSTRAINT "document.purchase_invoices.items_nomenclature_id_fkey" FOREIGN KEY ("nomenclature_id") REFERENCES "catalog.nomenclatures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

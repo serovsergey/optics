@@ -19,7 +19,6 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
     data: {
       name: 'Брендовые',
       isFolder: true,
-      typeId: rimsTypeId,
       parentId: rimsId,
     },
   });
@@ -27,14 +26,13 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
     data: {
       name: 'Mario Rossi',
       isFolder: true,
-      typeId: rimsTypeId,
       parentId: brandsId,
     },
   });
   await prisma.nomenclature.create({
     data: {
       name: 'Оправа Mario Rossi MR-2110',
-      isFolder: true,
+      isFolder: false,
       typeId: rimsTypeId,
       code: 'MR-2110',
       parentId: marioRossiId,
@@ -43,7 +41,7 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   await prisma.nomenclature.create({
     data: {
       name: 'Оправа Mario Rossi MR-2120',
-      isFolder: true,
+      isFolder: false,
       typeId: rimsTypeId,
       code: 'MR-2120',
       parentId: marioRossiId,
@@ -56,14 +54,13 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
     data: {
       name: 'Nikitana',
       isFolder: true,
-      typeId: rimsTypeId,
       parentId: chineseId,
     },
   });
   await prisma.nomenclature.create({
     data: {
       name: 'Оправа Nikitana NK-1',
-      isFolder: true,
+      isFolder: false,
       typeId: rimsTypeId,
       code: 'NK-1',
       parentId: nikitanaId,
@@ -72,27 +69,29 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   await prisma.nomenclature.create({
     data: {
       name: 'Оправа Nikitana NK-2',
-      isFolder: true,
+      isFolder: false,
       typeId: rimsTypeId,
       code: 'NK-2',
       parentId: nikitanaId,
     },
   });
   const { id: lensId } = await prisma.nomenclature.create({
-    data: { name: 'Линзы', isFolder: true, typeId: lensTypeId },
+    data: {
+      name: 'Линзы',
+      isFolder: true,
+    },
   });
   const { id: essilorId } = await prisma.nomenclature.create({
     data: {
       name: 'Essilor',
       isFolder: true,
-      typeId: lensTypeId,
       parentId: lensId,
     },
   });
   await prisma.nomenclature.create({
     data: {
       name: 'Линза Essilor Classic 1.5',
-      isFolder: true,
+      isFolder: false,
       typeId: lensTypeId,
       code: 'EC150',
       parentId: essilorId,
@@ -101,7 +100,7 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   await prisma.nomenclature.create({
     data: {
       name: 'Линза Essilor Standart 1.6',
-      isFolder: true,
+      isFolder: false,
       typeId: lensTypeId,
       code: 'ES160',
       parentId: essilorId,
@@ -110,7 +109,7 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   await prisma.nomenclature.create({
     data: {
       name: 'Линза Essilor Premium 1.67',
-      isFolder: true,
+      isFolder: false,
       typeId: lensTypeId,
       code: 'EP167',
       parentId: essilorId,
@@ -120,14 +119,13 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
     data: {
       name: 'Zeiss',
       isFolder: true,
-      typeId: lensTypeId,
       parentId: lensId,
     },
   });
   await prisma.nomenclature.create({
     data: {
       name: 'Линза Zeiss Classic 1.5',
-      isFolder: true,
+      isFolder: false,
       typeId: lensTypeId,
       code: 'ZC150',
       parentId: zeissId,
@@ -136,7 +134,7 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   await prisma.nomenclature.create({
     data: {
       name: 'Линза Zeiss Standart 1.6',
-      isFolder: true,
+      isFolder: false,
       typeId: lensTypeId,
       code: 'ZS160',
       parentId: zeissId,
@@ -145,28 +143,61 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   await prisma.nomenclature.create({
     data: {
       name: 'Линза Zeiss Blue',
-      isFolder: true,
+      isFolder: false,
       typeId: lensZeroTypeId,
       code: 'ZB',
       parentId: zeissId,
     },
   });
-  await prisma.nomenclature.create({
-    data: { name: 'Готовые очки', isFolder: true, typeId: readyGlassesTypeId },
+  const { id: readyGlassesId } = await prisma.nomenclature.create({
+    data: {
+      name: 'Готовые очки',
+      isFolder: true,
+    },
   });
   await prisma.nomenclature.create({
-    data: { name: 'Контактные линзы', isFolder: true, typeId: mklTypeId },
+    data: {
+      name: 'Очки-ручка',
+      isFolder: false,
+      typeId: readyGlassesTypeId,
+      code: 'GP',
+      parentId: readyGlassesId,
+    },
+  });
+  const { id: mklId } = await prisma.nomenclature.create({
+    data: {
+      name: 'Контактные линзы',
+      isFolder: true,
+    },
   });
   await prisma.nomenclature.create({
-    data: { name: 'Аксессуары', isFolder: true, typeId: accessoriesTypeId },
+    data: {
+      name: 'Infinity',
+      isFolder: false,
+      typeId: mklTypeId,
+      code: 'GP',
+      parentId: mklId,
+    },
+  });
+  const { id: accessoriesId } = await prisma.nomenclature.create({
+    data: { name: 'Аксессуары', isFolder: true },
+  });
+  await prisma.nomenclature.create({
+    data: {
+      name: 'Футляр',
+      isFolder: false,
+      typeId: accessoriesTypeId,
+      code: 'FC',
+      parentId: accessoriesId,
+    },
   });
   const { id: servicesId } = await prisma.nomenclature.create({
-    data: { name: 'Услуги', isFolder: true, typeId: servicesTypeId },
+    data: { name: 'Услуги', isFolder: true },
   });
   await prisma.nomenclature.create({
     data: {
       name: 'Изготовление очков',
-      isFolder: true,
+      isFolder: false,
       typeId: servicesTypeId,
       code: 'MG',
       parentId: servicesId,

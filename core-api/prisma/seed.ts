@@ -10,6 +10,7 @@ import {
 } from './seeds';
 import { seedEmployees } from './seeds/employees';
 import { setConstants } from './seeds/set-constants';
+import { seedVariantReadyGlasses } from './seeds/variant-ready-glasses';
 
 const prisma = new PrismaClient();
 
@@ -20,6 +21,7 @@ async function main() {
   await seedWarehouses(prisma);
   await seedPartners(prisma);
   await seedVariantLenses(prisma);
+  await seedVariantReadyGlasses(prisma);
   await seedNomenclatures(prisma);
   await seedEmployees(prisma);
   await setConstants(prisma);
