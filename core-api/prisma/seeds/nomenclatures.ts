@@ -13,7 +13,7 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
   } = await seedNomenclatureTypes(prisma);
 
   const { id: rimsId } = await prisma.nomenclature.create({
-    data: { name: 'Оправы', isFolder: true, typeId: rimsTypeId },
+    data: { name: 'Оправы', isFolder: true },
   });
   const { id: brandsId } = await prisma.nomenclature.create({
     data: {
@@ -203,4 +203,6 @@ export const seedNomenclatures = async (prisma: PrismaClient) => {
       parentId: servicesId,
     },
   });
+
+  return { rimsTypeId, lensTypeId };
 };

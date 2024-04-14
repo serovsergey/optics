@@ -2,6 +2,9 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Appearance } from './appearance.model';
 import { LensParams } from './lens-params.model';
 import { RimParams } from './rim-params.model';
+import { NomenclatureType } from './nomenclature-type.model';
+import { VariantLens } from 'modules/variants/lenses/models/variant-lens.model';
+import { VariantReadyGlasses } from 'modules/variants/ready-glasses/models/variant-ready-glasses.model';
 
 @ObjectType()
 export class Nomenclature {
@@ -20,6 +23,12 @@ export class Nomenclature {
   @Field({ nullable: true })
   description?: string;
 
+  @Field(() => Int)
+  typeId: number;
+
+  @Field(() => NomenclatureType)
+  type: NomenclatureType;
+
   @Field()
   createdAt: Date;
 
@@ -34,4 +43,7 @@ export class Nomenclature {
 
   @Field({ nullable: true })
   rimParams?: RimParams;
+
+  // @Field(() => [[VariantLens], [VariantReadyGlasses]])
+  // variants: VariantLens[] | VariantReadyGlasses[];
 }

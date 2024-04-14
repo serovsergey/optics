@@ -1,10 +1,10 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { AppearanceInput } from './appearance-input';
 import { RimParamsInput } from './rim-params-input';
 import { LensParamsInput } from './lens-params-input';
 
-@InputType()
-export class NomenclatureCreateInput {
+@ObjectType()
+export class NomenclatureCreateResult {
   @Field(() => Int, { nullable: true })
   parentId: number;
 

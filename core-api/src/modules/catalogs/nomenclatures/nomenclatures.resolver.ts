@@ -9,6 +9,7 @@ import { extractChildrenCount } from 'utils';
 import { Nomenclature } from './models/nomenclature.model';
 import { NomenclatureCreateInput } from './dto/nomenclature-create-input';
 import { ListOptionsPipe } from 'pipes';
+import { NomenclatureCreateResult } from './dto/nomenclature-create-result';
 
 @Resolver()
 export class NomenclaturesResolver {
@@ -60,15 +61,19 @@ export class NomenclaturesResolver {
   @Mutation(() => Nomenclature, { name: 'createNomenclature' })
   async createNomenclature(
     @Args('data') data: NomenclatureCreateInput,
-  ): Promise<Nomenclature> {
-    const { appearance, lensParams, rimParams, ...rest } = data;
+  ): Promise<NomenclatureCreateResult> {
+    const { parentId, typeId, appearance, lensParams, rimParams, ...rest } =
+      data;
     const { shapeId, ...rimParamsRest } = rimParams || {};
     const { colorId, ...appearanceRest } = appearance || {};
     const hasAppearance = appearance && Object.values(appearance).some(Boolean);
     const hasLensParams = lensParams && Object.values(lensParams).some(Boolean);
     const hasRimParams = rimParams && Object.values(rimParams).some(Boolean);
+
     return this.nomenclaturesService.create({
       ...rest,
+      parent: { connect: { id: parentId } },
+      type: { connect: { id: typeId } },
       ...(hasAppearance && {
         appearance: {
           create: {
