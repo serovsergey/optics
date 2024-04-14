@@ -6,6 +6,8 @@ import {
   //   Variant_ReadyGlasses,
 } from '@prisma/client';
 import { Nomenclature } from 'modules/catalogs/nomenclatures/models/nomenclature.model';
+import { VariantLens } from 'modules/variants/lenses/models/variant-lens.model';
+import { VariantReadyGlasses } from 'modules/variants/ready-glasses/models/variant-ready-glasses.model';
 
 @ObjectType()
 export class PurchaseInvoiceItem {
@@ -21,20 +23,17 @@ export class PurchaseInvoiceItem {
   @Field(() => Int, { nullable: true })
   variantId: number;
 
-  @Field(() => Int)
-  quantity: number;
+  @Field(() => Float)
+  quantity: PurchaseInvoiceItemPrisma['quantity'];
 
   @Field(() => Float)
   price: PurchaseInvoiceItemPrisma['price'];
 
-  @Field(() => Float)
-  total: PurchaseInvoiceItemPrisma['total'];
-
   @Field(() => Nomenclature, { nullable: true })
   nomenclature: Nomenclature;
 
-  //   @Field
-  //   variant: Variant_Lenses | Variant_ReadyGlasses;
+  @Field(() => [VariantLens, VariantReadyGlasses])
+  variant: VariantLens | VariantReadyGlasses;
 
   @Field()
   createdAt: Date;

@@ -23,9 +23,6 @@ export class PurchaseInvoice {
   @Field(() => Employee)
   author: Employee;
 
-  @Field(() => Float)
-  total?: number;
-
   @Field()
   isPosted: boolean;
 

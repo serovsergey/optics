@@ -1,17 +1,29 @@
 import { PrismaClient } from '@prisma/client';
+import { VariantLens } from 'modules/variants/lenses/models/variant-lens.model';
 
-export const seedPurchaseInvoices = async (prisma: PrismaClient) => {
-  const lensesType = await prisma.nomenclatureType.create({
-    data: { name: 'Лінзи1', variantsTable: 'lenses' },
-  });
-  const rimType = await prisma.nomenclatureType.create({
-    data: { name: 'Оправи1', variantsTable: 'lenses' },
-  });
+export const seedPurchaseInvoices = async (
+  prisma: PrismaClient,
+  lensTypeId: number,
+  rimsTypeId: number,
+  lensVariants: VariantLens[],
+) => {
+  // const lensesType = await prisma.nomenclatureType.create({
+  //   data: { name: 'Лінзи1', variantsTable: 'lenses' },
+  // });
+  // const rimType = await prisma.nomenclatureType.create({
+  //   data: { name: 'Оправи1', variantsTable: 'lenses' },
+  // });
   const nomenclature1 = await prisma.nomenclature.create({
-    data: { name: 'Лінза', isFolder: false, typeId: lensesType.id },
+    data: { name: 'Лінза', isFolder: false, typeId: lensTypeId },
   });
+  const variant1 = lensVariants.find(
+    ({ name }) => name === 'Sph: +1.00, D: 65',
+  );
+  const variant2 = lensVariants.find(
+    ({ name }) => name === 'Sph: +1.25, D: 65',
+  );
   const nomenclature2 = await prisma.nomenclature.create({
-    data: { name: 'Оправв', isFolder: false, typeId: rimType.id },
+    data: { name: 'Оправа', isFolder: false, typeId: rimsTypeId },
   });
   const invoice = await prisma.purchaseInvoice.create({
     data: {
@@ -25,10 +37,20 @@ export const seedPurchaseInvoices = async (prisma: PrismaClient) => {
           data: [
             {
               nomenclatureId: nomenclature1.id,
-              variantId: 1,
+              variantId: variant1.id,
               quantity: 2,
-              price: 100,
-              total: 100,
+              price: 800,
+            },
+            {
+              nomenclatureId: nomenclature1.id,
+              variantId: variant2.id,
+              quantity: 2,
+              price: 800,
+            },
+            {
+              nomenclatureId: nomenclature2.id,
+              quantity: 1,
+              price: 1200,
             },
           ],
         },

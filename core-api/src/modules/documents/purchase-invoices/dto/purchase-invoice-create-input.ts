@@ -12,7 +12,7 @@ export class PurchaseInvoiceCreateInput {
   @Field(() => Int, { nullable: true })
   partnerId: number;
 
-  @Field()
+  @Field(() => Int)
   warehouseId: number;
 
   @Field()
@@ -20,9 +20,6 @@ export class PurchaseInvoiceCreateInput {
 
   @Field(() => Float, { nullable: true })
   total?: number;
-
-  @Field({ nullable: true })
-  isPosted?: boolean;
 
   @Field(() => [PurchaseInvoiceItemInput], { nullable: true })
   items?: PurchaseInvoiceItemInput[];

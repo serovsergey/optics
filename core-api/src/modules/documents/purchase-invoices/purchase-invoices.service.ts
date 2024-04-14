@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'modules/service/database/prisma.service';
 
 @Injectable()
 export class PurchaseInvoicesService {
   constructor(private prisma: PrismaService) {}
 
-  private readonly include = {
-    items: { include: { nomenclature: true } },
+  private readonly include: Prisma.PurchaseInvoiceInclude<DefaultArgs> = {
+    items: { include: { nomenclature: { include: { type: true } } } },
     warehouse: true,
     partner: true,
     author: true,

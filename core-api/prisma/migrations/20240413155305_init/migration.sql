@@ -173,7 +173,6 @@ CREATE TABLE "document.purchase_invoices" (
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "author_id" INTEGER NOT NULL,
-    "total" DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     "is_posted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "document.purchase_invoices_pkey" PRIMARY KEY ("id")
@@ -185,9 +184,8 @@ CREATE TABLE "document.purchase_invoices.items" (
     "invoice_id" INTEGER,
     "nomenclature_id" INTEGER,
     "variant_id" INTEGER,
-    "quantity" INTEGER NOT NULL,
+    "quantity" DECIMAL(12,3) NOT NULL DEFAULT 0.000,
     "price" DECIMAL(12,2) NOT NULL DEFAULT 0.00,
-    "total" DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

@@ -222,7 +222,6 @@ model PurchaseInvoice {
   updatedAt   DateTime              @default(now()) @map("updated_at") @db.Timestamptz(6)
   authorId    Int                   @map("author_id")
   author      Employee              @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  total       Decimal               @default(0.00) @db.Decimal(12, 2)
   isPosted    Boolean               @default(false) @map("is_posted")
   items       PurchaseInvoiceItem[]
 
@@ -236,9 +235,8 @@ model PurchaseInvoiceItem {
   nomenclatureId Int?             @map("nomenclature_id")
   nomenclature   Nomenclature?    @relation(fields: [nomenclatureId], references: [id], onDelete: Restrict)
   variantId      Int?             @map("variant_id")
-  quantity       Int
+  quantity       Decimal          @default(0.000) @db.Decimal(12, 3)
   price          Decimal          @default(0.00) @db.Decimal(12, 2)
-  total          Decimal          @default(0.00) @db.Decimal(12, 2)
   createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
 
